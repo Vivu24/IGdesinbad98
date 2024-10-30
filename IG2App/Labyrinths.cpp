@@ -10,6 +10,23 @@ Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad) : mSM_
 {
     node_ = mSM_->getRootSceneNode()->createChildSceneNode("nLabyrinth");
     read(archivo);
+
+    MeshManager::getSingleton().createPlane(
+        "mPlane1080x800",
+        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+        Plane(Vector3::UNIT_Z, 0),
+        numColumnas * 98, numFilas * 98,
+        100, 80,
+        true, 
+        1, 
+        1.0, 1.0, 
+        Vector3::UNIT_Y
+    );
+
+    Entity* planeEntity = mSM->createEntity("floor", "mPlane1080x800");
+    SceneNode* planeNode = mSM->getRootSceneNode()->createChildSceneNode("floorNode");
+    planeNode->attachObject(planeEntity);
+    planeNode->setPosition(Vector3(numColumnas * 48, numFilas * 48, -48));
 }
 
 LabEntity* Labyrinths::getNextEntity(Vector3 next)

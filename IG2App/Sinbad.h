@@ -14,12 +14,13 @@ public:
 	bool keyPressed(const OgreBites::KeyboardEvent& evt) override;
 	void frameRendered(const Ogre::FrameEvent& evt) override;
 
-	void checkMovement();
-	void checkWall();
-	void move(Vector3 direction);
-	void addPoints(int p);
 	void setLab(Labyrinths* lab) { lab_ = lab; }
 private:
+	void collisions();
+	void checkMovement();
+	void addPoints(int p);
+	void move(Vector3 direction);
+
 	int lifes_;
 	int points_;
 

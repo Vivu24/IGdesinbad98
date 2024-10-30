@@ -1,6 +1,7 @@
 #include "Sinbad.h"
 #include "Labyrinths.h"
 #include "LabEntity.h"
+#include "Pearl.h"
 
 Sinbad::Sinbad(Vector3 initPos, SceneNode* node, SceneManager* mSM) : 
 	IG2Object(initPos, node, mSM, "Sinbad.mesh"), lifes_(3), points_(0), dir_(1, 0, 0), nextDir_(dir_), onCenter_(false)
@@ -11,29 +12,19 @@ Sinbad::Sinbad(Vector3 initPos, SceneNode* node, SceneManager* mSM) :
 
 void Sinbad::checkMovement()
 {
-    Vector3 auxPos = mNode->getPosition();
-
-    // Sinbad Centrado
-    if (((int)auxPos.x % 98 == 0) && ((int)auxPos.y % 98 == 0)) 
-    {
-        LabEntity* nextLabEntity = lab_->getNextEntity(getPosition() + (nextDir_ * 98));
-        if (nextLabEntity->isWall())
-        {
-            dir_ = Vector3(0, 0, 0);
-            cout << "Wall" << endl;
-        }
-        else if (!nextLabEntity->isWall() || nextLabEntity == nullptr)
-        {
-            dir_ = nextDir_;
-            mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
-            cout << "NoWall" << endl;
-        }
+    LabEntity* nextLabEntity = lab_->getNextEntity(getPosition() + (nextDir_ * 98));
         
+    if (nextLabEntity->isWall())
+    {
+        dir_ = Vector3(0, 0, 0);
+        //cout << "Wall" << endl;
     }
-}
-
-void Sinbad::checkWall()
-{
+    else if (!nextLabEntity->isWall() || nextLabEntity == nullptr)
+    {
+        dir_ = nextDir_;
+        mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
+        //cout << "NoWall" << endl;
+    }
 }
 
 void Sinbad::move(Vector3 direction)
@@ -44,6 +35,20 @@ void Sinbad::move(Vector3 direction)
 void Sinbad::addPoints(int p)
 {
     points_ += p;
+}
+
+void Sinbad::collisions()
+{
+    LabEntity* currentLabEntity = lab_->getNextEntity(getPosition());
+
+    if (!currentLabEntity->isDead_ && getAABB().intersects(currentLabEntity->getAABB()))
+    {
+        currentLabEntity->setVisible(false);
+        currentLabEntity->isDead_ = true;
+
+        std::cout << "Suma 10 puntos" << "\n";
+        addPoints(10);
+    }
 }
 
 bool Sinbad::keyPressed(const OgreBites::KeyboardEvent& evt) 
@@ -67,5 +72,12 @@ bool Sinbad::keyPressed(const OgreBites::KeyboardEvent& evt)
 void Sinbad::frameRendered(const Ogre::FrameEvent& evt)
 {
     move(dir_);
-    checkMovement();
+
+    Vector3 auxPos = mNode->getPosition();
+    // Sinbad Centrado
+    if (((int)auxPos.x % 98 == 0) && ((int)auxPos.y % 98 == 0))
+    {
+        checkMovement();
+        collisions();
+    }
 }
