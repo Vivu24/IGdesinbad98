@@ -48,6 +48,13 @@ void IG2App::setup(void){
     mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
     addInputListener(mTrayMgr);
     
+    // HUD
+    mHUDManager = new OgreBites::TrayManager("HUDManager", mWindow.render);
+    mLabel = mHUDManager->createLabel(OgreBites::TL_BOTTOMRIGHT, "TitleLabel", "Stage: ", 500.0);
+    mTextBox = mHUDManager->createTextBox(OgreBites::TL_BOTTOMRIGHT, "TextBox", "Game Info Here!", 500.0, 100.0);
+
+    addInputListener(mHUDManager);
+
     // Adds the listener for this object
     addInputListener(this);
     setupScene();
@@ -319,12 +326,16 @@ void IG2App::setupScene(void){
     mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM);
     addInputListener(mSinbad);
 
+    
+
     // Laberinto
-    mLab = new Labyrinths("stage1.txt", mSM, mSinbad);
+    mLab = new Labyrinths("stage1.txt", mSM, mSinbad, mTextBox);
 
     Vector3 auxLabPos = mLab->getCenter();
     mCamNode->setPosition(auxLabPos.x, auxLabPos.y, auxLabPos.z + 3000);
     mCamNode->lookAt(auxLabPos, Ogre::Node::TS_WORLD);
+
+
 
 
 #pragma endregion

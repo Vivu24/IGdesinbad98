@@ -67,6 +67,10 @@ protected:
     
     Ogre::SceneNode* mCamNode = nullptr;
     OgreBites::CameraMan* mCamMgr = nullptr;
+
+    OgreBites::Label* mLabel = nullptr;
+    OgreBites::TextBox* mTextBox= nullptr;
+    OgreBites::TrayManager* mHUDManager = nullptr;
 };
 
 #endif

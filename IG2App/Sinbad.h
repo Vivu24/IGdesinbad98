@@ -14,16 +14,16 @@ public:
 	bool keyPressed(const OgreBites::KeyboardEvent& evt) override;
 	void frameRendered(const Ogre::FrameEvent& evt) override;
 
-	void setLab(Labyrinths* lab) { lab_ = lab; }
-private:
-	void collisions();
 	void checkMovement();
-	void addPoints(int p);
+	void checkWall();
 	void move(Vector3 direction);
+	void addPoints(int p);
+	void setLab(Labyrinths* lab) { lab_ = lab; }
 
 	int lifes_;
 	int points_;
 
+private:
 	Vector3 dir_;
 	Vector3 nextDir_;
 	Labyrinths* lab_;
