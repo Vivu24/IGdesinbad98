@@ -19,11 +19,13 @@ Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBi
         100, 80,
         true,
         1,
-        1.0, 1.0,
+        5.0, 5.0,   // nº repeticiones de la textura
         Vector3::UNIT_Y
     );
 
     Entity* planeEntity = mSM->createEntity("floor", "mPlane1080x800");
+    planeEntity->setMaterialName(floorMat_);
+    // Estaría guay alejar el ratio de repeticion de la text del suelo
     SceneNode* planeNode = mSM->getRootSceneNode()->createChildSceneNode("floorNode");
     planeNode->attachObject(planeEntity);
     planeNode->setPosition(Vector3(numColumnas * 48, numFilas * 48, -48));
