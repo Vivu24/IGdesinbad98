@@ -30,7 +30,7 @@ material mat/pearl{
 		pass {  
 			texture_unit 
 			{
-				texture nm_up.png
+				texture nm_up.PNG
 				
 			}
 		}

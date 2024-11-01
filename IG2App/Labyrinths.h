@@ -34,6 +34,10 @@ private:
 
 	OgreBites::TextBox* textBox_ = nullptr;
 
+	string floorMat_ = "";
+	string wallMat_ = "";
+	string pearlMat_ = "";
+
 	void read(string archivo);
 };
 

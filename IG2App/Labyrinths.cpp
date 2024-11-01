@@ -50,6 +50,9 @@ void Labyrinths::read(string archivo)
     }
 
     fich >> numFilas >> numColumnas;
+    fich >> pearlMat_ 
+        >> wallMat_ 
+        >> floorMat_;
 
     char valor;
     int j = 0; // fila
@@ -58,11 +61,11 @@ void Labyrinths::read(string archivo)
     {
         if (valor == 'x')
         {
-            LabEntity* wall = new Wall(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
+            LabEntity* wall = new Wall(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, wallMat_);
             lab_.push_back(wall);
         }
         else if (valor == 'o') {
-            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
         }
@@ -71,7 +74,7 @@ void Labyrinths::read(string archivo)
             sinbad_->setScale(Vector3(8, 8, 8));
             sinbad_->setLab(this);
 
-            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
         }
@@ -93,7 +96,7 @@ void Labyrinths::read(string archivo)
         }
     }
 
-    std::cout << "fin";
+    //std::cout << "fin";
 }
 
 void Labyrinths::updateHUD()
