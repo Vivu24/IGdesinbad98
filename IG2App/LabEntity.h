@@ -4,8 +4,7 @@ class LabEntity : public IG2Object
 {
 public:
 	LabEntity(Vector3 initPos, SceneNode* node, SceneManager* mSM, string mesh);
-
-public:
+	bool isDead_ = false;
 	virtual bool isWall() = 0;
 };
 

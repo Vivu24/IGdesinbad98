@@ -15,7 +15,7 @@ public:
 	void frameRendered(const Ogre::FrameEvent& evt) override;
 
 	void checkMovement();
-	void checkWall();
+	void collisions();
 	void move(Vector3 direction);
 	void addPoints(int p);
 	void setLab(Labyrinths* lab) { lab_ = lab; }

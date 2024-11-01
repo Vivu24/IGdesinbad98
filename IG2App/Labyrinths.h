@@ -19,6 +19,7 @@ public:
 	int getNumFilas() { return numFilas; }
 	int getNumColumnas() { return numColumnas; }
 	LabEntity* getNextEntity(Vector3 next);
+	void updateHUD();
 
 private:
 	int numFilas;
