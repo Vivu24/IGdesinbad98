@@ -19,6 +19,8 @@ public:
 	void move(Vector3 direction);
 	void addPoints(int p);
 	void setLab(Labyrinths* lab) { lab_ = lab; }
+	void initLight(Ogre::SceneNode* l);
+	void updateLight();
 
 	int lifes_;
 	int points_;
@@ -27,6 +29,8 @@ private:
 	Vector3 dir_;
 	Vector3 nextDir_;
 	Labyrinths* lab_;
+
+	Ogre::SceneNode* mLightNode_;
 
 	bool onCenter_;
 };

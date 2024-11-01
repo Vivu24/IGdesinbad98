@@ -23,6 +23,7 @@ Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBi
         Vector3::UNIT_Y
     );
 
+    // Floor
     Entity* planeEntity = mSM->createEntity("floor", "mPlane1080x800");
     planeEntity->setMaterialName(floorMat_);
     // Estaría guay alejar el ratio de repeticion de la text del suelo
@@ -30,6 +31,8 @@ Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBi
     planeNode->attachObject(planeEntity);
     planeNode->setPosition(Vector3(numColumnas * 48, numFilas * 48, -48));
 
+    // Light
+    initLight(lightType_);
     textBox_->appendText("Lives: " + to_string(sinbad_->lifes_) + "\nPoints: " + to_string(sinbad_->points_));
 }
 
@@ -51,10 +54,7 @@ void Labyrinths::read(string archivo)
         exit(EXIT_FAILURE);
     }
 
-    fich >> numFilas >> numColumnas;
-    fich >> pearlMat_ 
-        >> wallMat_ 
-        >> floorMat_;
+    fich >> numFilas >> numColumnas >> pearlMat_ >> wallMat_ >> floorMat_ >> lightType_;
 
     char valor;
     int j = 0; // fila
@@ -99,6 +99,26 @@ void Labyrinths::read(string archivo)
     }
 
     //std::cout << "fin";
+}
+
+void Labyrinths::initLight(string light)
+{
+    // The light
+    light_ = mSM_->createLight("light");
+    light_->setDiffuseColour(1.0f, 1.0f, 1.0f);
+    // Node with the light attached
+    mLightNode_ = mSM_->getRootSceneNode()->createChildSceneNode("nLight");
+    mLightNode_->setPosition(sinbad_->getPosition().x, sinbad_->getPosition().y, sinbad_->getPosition().z + 100);
+    mLightNode_->attachObject(light_);
+
+
+    if (light == "directional") {
+        light_->setType(Light::LT_DIRECTIONAL);
+    }
+    else if (light == "spotLight") {    // mirar point y spotlight
+        light_->setType(Light::LT_SPOTLIGHT);
+    }
+    sinbad_->initLight(mLightNode_);
 }
 
 void Labyrinths::updateHUD()

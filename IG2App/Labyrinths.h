@@ -34,10 +34,17 @@ private:
 
 	OgreBites::TextBox* textBox_ = nullptr;
 
+	// Texture
 	string floorMat_ = "";
 	string wallMat_ = "";
 	string pearlMat_ = "";
 
+	// Light
+	string lightType_ = "";
+	Ogre::Light* light_ = nullptr;
+	Ogre::SceneNode* mLightNode_ = nullptr;
+
 	void read(string archivo);
+	void initLight(string light);
 };
 

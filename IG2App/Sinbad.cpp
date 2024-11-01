@@ -4,7 +4,7 @@
 #include "Pearl.h"
 
 Sinbad::Sinbad(Vector3 initPos, SceneNode* node, SceneManager* mSM) : 
-	IG2Object(initPos, node, mSM, "Sinbad.mesh"), lifes_(3), points_(0), dir_(1, 0, 0), nextDir_(dir_), onCenter_(false)
+	IG2Object(initPos, node, mSM, "Sinbad.mesh"), lifes_(3), points_(0), dir_(1, 0, 0), nextDir_(dir_), onCenter_(false), mLightNode_(nullptr)
 {
     mNode->rotate(getOrientation().getRotationTo(dir_));
     mNode->roll(Degree(90));
@@ -53,6 +53,16 @@ void Sinbad::addPoints(int p)
     points_ += p;
 }
 
+void Sinbad::initLight(Ogre::SceneNode* l)
+{
+    mLightNode_ = l;
+}
+
+void Sinbad::updateLight()
+{
+    mLightNode_->setPosition(this->mNode->getPosition().x, this->mNode->getPosition().y, this->mNode->getPosition().z + 100);
+}
+
 bool Sinbad::keyPressed(const OgreBites::KeyboardEvent& evt) 
 {
     // Movimiento Sinbad
@@ -75,6 +85,7 @@ void Sinbad::frameRendered(const Ogre::FrameEvent& evt)
 {
     move(dir_);
     Vector3 auxPos = mNode->getPosition();
+    updateLight();
     // Sinbad Centrado
     if (((int)auxPos.x % 98 == 0) && ((int)auxPos.y % 98 == 0))
     {

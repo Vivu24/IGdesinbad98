@@ -3,6 +3,7 @@
 mat/pearl
 mat/wall
 mat/floor
+pointLight
 xxxxxxxxxxxxxxxxxxx
 xooooooooxoooooooox
 xoxxoxxxoxoxxxoxxox
