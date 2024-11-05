@@ -324,12 +324,14 @@ void IG2App::setupScene(void){
 
     // Sinbad
     mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM);
-    addInputListener(mSinbad);
-
-    
 
     // Laberinto
     mLab = new Labyrinths("stage1.txt", mSM, mSinbad, mTextBox);
+
+    // Listeners
+    addInputListener(mSinbad);
+    for (int i = 0; i < mLab->getMovableEntities().size(); ++i)
+        addInputListener(mLab->getMovableEntities()[i]);
 
     Vector3 auxLabPos = mLab->getCenter();
     mCamNode->setPosition(auxLabPos.x, auxLabPos.y, auxLabPos.z + 3000);

@@ -5,7 +5,7 @@
 #include <OgreTrays.h>
 
 class LabEntity;
-class Sinbad;
+class MovableEntity;
 
 using namespace std;
 
@@ -14,11 +14,11 @@ class Labyrinths
 public:
 	Labyrinths(string archivo, Ogre::SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb);
 	
+	Vector3 diagonal() { return Vector3(numColumnas * 98, numFilas * 98, 0); }
 	Sinbad* getSinbad() { return sinbad_; }
 	Vector3 getCenter() { return Vector3(numFilas * 49, numColumnas * 49, 0); };
-	int getNumFilas() { return numFilas; }
-	int getNumColumnas() { return numColumnas; }
 	LabEntity* getNextEntity(Vector3 next);
+	std::vector<MovableEntity*> getMovableEntities() { return enemies_; };
 	void updateHUD();
 
 private:
@@ -26,6 +26,7 @@ private:
 	int numColumnas;
 
 	std::vector<LabEntity*> lab_;
+	std::vector<MovableEntity*> enemies_;
 	Sinbad* sinbad_;
 
 	Ogre::SceneManager* mSM_;

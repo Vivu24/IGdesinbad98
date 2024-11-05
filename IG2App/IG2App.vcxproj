@@ -119,24 +119,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="IG2ApplicationContext.h" />
     <ClInclude Include="IG2App.h" />
     <ClInclude Include="IG2Object.h" />
     <ClInclude Include="LabEntity.h" />
     <ClInclude Include="Labyrinths.h" />
+    <ClInclude Include="MovableEntity.h" />
+    <ClInclude Include="NormalEnemy.h" />
     <ClInclude Include="Pearl.h" />
     <ClInclude Include="Sinbad.h" />
+    <ClInclude Include="Transformer.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="IG2ApplicationContext.cpp" />
     <ClCompile Include="IG2Main.cpp" />
     <ClCompile Include="IG2App.cpp" />
     <ClCompile Include="IG2Object.cpp" />
     <ClCompile Include="LabEntity.cpp" />
     <ClCompile Include="Labyrinths.cpp" />
+    <ClCompile Include="MovableEntity.cpp" />
+    <ClCompile Include="NormalEnemy.cpp" />
     <ClCompile Include="Pearl.cpp" />
     <ClCompile Include="Sinbad.cpp" />
+    <ClCompile Include="Transformer.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

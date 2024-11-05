@@ -5,8 +5,11 @@
 #include <fstream>
 #include "Pearl.h"
 #include "Sinbad.h"
+#include "NormalEnemy.h"
+#include "Transformer.h"
 
-Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb) : mSM_(mSM), sinbad_(sinbad), textBox_(tb)
+Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb) : 
+    mSM_(mSM), sinbad_(sinbad), textBox_(tb)
 {
     node_ = mSM_->getRootSceneNode()->createChildSceneNode("nLabyrinth");
     read(archivo);
@@ -29,7 +32,7 @@ Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBi
     // Estaría guay alejar el ratio de repeticion de la text del suelo
     SceneNode* planeNode = mSM->getRootSceneNode()->createChildSceneNode("floorNode");
     planeNode->attachObject(planeEntity);
-    planeNode->setPosition(Vector3(numColumnas * 48, numFilas * 48, -48));
+    planeNode->setPosition(Vector3(numColumnas * 49 + 49, numFilas * 49 + 49, -48));
 
     // Light
     initLight(lightType_);
@@ -57,8 +60,8 @@ void Labyrinths::read(string archivo)
     fich >> numFilas >> numColumnas >> pearlMat_ >> wallMat_ >> floorMat_ >> lightType_;
 
     char valor;
-    int j = 0; // fila
-    int i = 0; // columna
+    int j = numFilas; // fila
+    int i = numColumnas; // columna
     while (fich >> valor)
     {
         if (valor == 'x')
@@ -80,15 +83,33 @@ void Labyrinths::read(string archivo)
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
         }
+        else if (valor == 'v') {
+            MovableEntity* enemy = new NormalEnemy(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
+            enemy->setLab(this);
+            enemies_.push_back(enemy);
+
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
+            pearl->setScale(Vector3(0.1, 0.1, 0.1));
+            lab_.push_back(pearl);
+        }
+        else if (valor == 'V') {
+            MovableEntity* enemy = new Transformer(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
+            enemy->setLab(this);
+            enemies_.push_back(enemy);
+
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
+            pearl->setScale(Vector3(0.1, 0.1, 0.1));
+            lab_.push_back(pearl);
+        }
 
         cout << valor;
 
-        ++i;
+        --i;
 
-        if (i == numColumnas)
+        if (i == 0)
         {
-            ++j;
-            i = 0;
+            --j;
+            i = numColumnas;
             cout << '\n';
         }
 

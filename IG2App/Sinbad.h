@@ -1,10 +1,7 @@
 #pragma once
-#include "IG2Object.h"
-#include <OgreInput.h>
+#include "MovableEntity.h"
 
-class Labyrinths;
-
-class Sinbad : public IG2Object, OgreBites::InputListener
+class Sinbad : public MovableEntity
 {
 public:
 	//Sinbad() {};
@@ -14,24 +11,15 @@ public:
 	bool keyPressed(const OgreBites::KeyboardEvent& evt) override;
 	void frameRendered(const Ogre::FrameEvent& evt) override;
 
-	void checkMovement();
-	void collisions();
-	void move(Vector3 direction);
-	void addPoints(int p);
-	void setLab(Labyrinths* lab) { lab_ = lab; }
 	void initLight(Ogre::SceneNode* l);
-	void updateLight();
 
-	int lifes_;
 	int points_;
 
 private:
-	Vector3 dir_;
-	Vector3 nextDir_;
-	Labyrinths* lab_;
+	void collisions();
+	void updateLight();
+	void addPoints(int p);
 
 	Ogre::SceneNode* mLightNode_;
-
-	bool onCenter_;
 };
 

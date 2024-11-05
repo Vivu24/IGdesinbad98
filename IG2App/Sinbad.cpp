@@ -4,27 +4,19 @@
 #include "Pearl.h"
 
 Sinbad::Sinbad(Vector3 initPos, SceneNode* node, SceneManager* mSM) : 
-	IG2Object(initPos, node, mSM, "Sinbad.mesh"), lifes_(3), points_(0), dir_(1, 0, 0), nextDir_(dir_), onCenter_(false), mLightNode_(nullptr)
+	MovableEntity(initPos, node, mSM, "Sinbad.mesh"), points_(0), mLightNode_(nullptr)
 {
-    mNode->rotate(getOrientation().getRotationTo(dir_));
-    mNode->roll(Degree(90));
+    std::cout << "Sinbad";
 }
 
-void Sinbad::checkMovement()
+void Sinbad::addPoints(int p)
 {
-    LabEntity* nextLabEntity = lab_->getNextEntity(getPosition() + (nextDir_ * 98));
+    points_ += p;
+}
 
-    if (nextLabEntity->isWall())
-    {
-        dir_ = Vector3(0, 0, 0);
-        //cout << "Wall" << endl;
-    }
-    else if (!nextLabEntity->isWall() || nextLabEntity == nullptr) {
-        dir_ = nextDir_;
-        mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
-        //cout << "NoWall" << endl;
-    }
-
+void Sinbad::initLight(Ogre::SceneNode* l)
+{
+    mLightNode_ = l;
 }
 
 void Sinbad::collisions()
@@ -40,22 +32,6 @@ void Sinbad::collisions()
         addPoints(10);
         lab_->updateHUD();
     }
-}
-
-
-void Sinbad::move(Vector3 direction)
-{
-	mNode->translate(direction);
-}
-
-void Sinbad::addPoints(int p)
-{
-    points_ += p;
-}
-
-void Sinbad::initLight(Ogre::SceneNode* l)
-{
-    mLightNode_ = l;
 }
 
 void Sinbad::updateLight()
@@ -90,6 +66,7 @@ void Sinbad::frameRendered(const Ogre::FrameEvent& evt)
     if (((int)auxPos.x % 98 == 0) && ((int)auxPos.y % 98 == 0))
     {
         checkMovement();
+        if (walled_) dir_ = Vector3(0, 0, 0);
         collisions();
     }
 }
