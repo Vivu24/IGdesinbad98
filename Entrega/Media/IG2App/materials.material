@@ -1,0 +1,38 @@
+material mat/floor{
+    technique 
+	{ 
+		pass {  
+			texture_unit 
+			{
+				texture grass.PNG
+				
+			}
+		}
+    }
+}
+
+material mat/wall{
+    technique 
+	{ 
+		pass {  
+			texture_unit 
+			{
+				texture floor_diffuse.PNG
+				
+			}
+		}
+    }
+}
+
+material mat/pearl{
+    technique 
+	{ 
+		pass {  
+			texture_unit 
+			{
+				texture dkyellow.PNG
+				
+			}
+		}
+    }
+}
