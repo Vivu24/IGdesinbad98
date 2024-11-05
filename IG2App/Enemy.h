@@ -6,8 +6,8 @@ class Enemy :
     public MovableEntity
 {
 public:
-    Enemy(Vector3 initPos, SceneNode* node, SceneManager* mSM, string mesh);
-    Enemy(Vector3 initPos, SceneNode* node, SceneManager* mSM);
+    Enemy(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const string& mesh, int vel);
+    Enemy(const Vector3& initPos, SceneNode* node, SceneManager* mSM, int vel);
 
     void frameRendered(const Ogre::FrameEvent& evt) override;
 

@@ -8,8 +8,8 @@
 #include "NormalEnemy.h"
 #include "Transformer.h"
 
-Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb) : 
-    mSM_(mSM), sinbad_(sinbad), textBox_(tb)
+Labyrinths::Labyrinths(const string& archivo, SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb) : 
+    sinbad_(sinbad), mSM_(mSM), textBox_(tb)
 {
     node_ = mSM_->getRootSceneNode()->createChildSceneNode("nLabyrinth");
     read(archivo);
@@ -22,24 +22,23 @@ Labyrinths::Labyrinths(string archivo, SceneManager* mSM, Sinbad* sinbad, OgreBi
         100, 80,
         true,
         1,
-        5.0, 5.0,   // nº repeticiones de la textura
+        5.0, 5.0,   
         Vector3::UNIT_Y
     );
 
     // Floor
     Entity* planeEntity = mSM->createEntity("floor", "mPlane1080x800");
     planeEntity->setMaterialName(floorMat_);
-    // Estaría guay alejar el ratio de repeticion de la text del suelo
     SceneNode* planeNode = mSM->getRootSceneNode()->createChildSceneNode("floorNode");
     planeNode->attachObject(planeEntity);
     planeNode->setPosition(Vector3(numColumnas * 49 + 49, numFilas * 49 + 49, -48));
 
     // Light
     initLight(lightType_);
-    textBox_->appendText("Lives: " + to_string(sinbad_->lifes_) + "\nPoints: " + to_string(sinbad_->points_));
+    textBox_->appendText("Lives: " + to_string(sinbad_->lifes()) + "\nPoints: " + to_string(sinbad_->points()));
 }
 
-LabEntity* Labyrinths::getNextEntity(Vector3 next)
+LabEntity* Labyrinths::getNextEntity(const Vector3& next) const
 {
     int i = 0;
     while (next != lab_[i]->getPosition()) ++i;
@@ -48,7 +47,7 @@ LabEntity* Labyrinths::getNextEntity(Vector3 next)
     else return lab_[i];
 }
 
-void Labyrinths::read(string archivo)
+void Labyrinths::read(const string& archivo)
 {
     ifstream fich(archivo);
     if (!fich.is_open())
@@ -122,7 +121,7 @@ void Labyrinths::read(string archivo)
     //std::cout << "fin";
 }
 
-void Labyrinths::initLight(string light)
+void Labyrinths::initLight(const string& light)
 {
     // The light
     light_ = mSM_->createLight("light");
@@ -142,11 +141,11 @@ void Labyrinths::initLight(string light)
     sinbad_->initLight(mLightNode_);
 }
 
-void Labyrinths::updateHUD()
+void Labyrinths::updateHud() const
 {
     textBox_->clearText();
 
-    textBox_->appendText("Lives: " + to_string(sinbad_->lifes_) + "\nPoints: " + to_string(sinbad_->points_));
+    textBox_->appendText("Lives: " + to_string(sinbad_->lifes()) + "\nPoints: " + to_string(sinbad_->points()));
     
 }
 

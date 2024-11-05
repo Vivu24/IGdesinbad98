@@ -4,7 +4,7 @@ class Transformer :
     public Enemy
 {
 public:
-    Transformer(Vector3 initPos, SceneNode* node, SceneManager* mSM);
+    Transformer(const Vector3& initPos, SceneNode* node, SceneManager* mSM, int vel = 1);
 	void frameRendered(const Ogre::FrameEvent& evt) override;
 
 private:
@@ -12,7 +12,7 @@ private:
 	SceneNode* nPlaneta;
 	SceneNode* nPlaneta2;
 
-	int angle_;
+	Real angle_;
 
 	Timer* timer_;
 };

@@ -4,22 +4,19 @@
 class Sinbad : public MovableEntity
 {
 public:
-	//Sinbad() {};
-
-	Sinbad(Vector3 initPos, SceneNode* node, SceneManager* mSM);
+	Sinbad(const Vector3& initPos, SceneNode* node, SceneManager* mSM, int vel = 1);
 
 	bool keyPressed(const OgreBites::KeyboardEvent& evt) override;
 	void frameRendered(const Ogre::FrameEvent& evt) override;
 
 	void initLight(Ogre::SceneNode* l);
-
-	int points_;
-
+	int points() const { return points_; }
 private:
 	void collisions();
-	void updateLight();
+	void updateLight() const;
 	void addPoints(int p);
 
+	int points_;
 	Ogre::SceneNode* mLightNode_;
 };
 

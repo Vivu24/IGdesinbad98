@@ -3,23 +3,23 @@
 #include "Labyrinths.h"
 
 // Constructora Normal
-Enemy::Enemy(Vector3 initPos, SceneNode* node, SceneManager* mSM, string mesh) :
-	MovableEntity(initPos, node, mSM, mesh) 
+Enemy::Enemy(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const string& mesh, int vel) :
+	MovableEntity(initPos, node, mSM, mesh, vel) 
 {
 	std::cout << "Enemy";
 }
 
 // Constructora Boss
-Enemy::Enemy(Vector3 initPos, SceneNode* node, SceneManager* mSM) :
-    MovableEntity(initPos, node, mSM)
+Enemy::Enemy(const Vector3& initPos, SceneNode* node, SceneManager* mSM, int vel) :
+    MovableEntity(initPos, node, mSM, vel)
 {
-    std::cout << "Trnasformer";
+    std::cout << "Transformer";
 }
 
 void Enemy::frameRendered(const Ogre::FrameEvent& evt)
 {
     move(dir_);
-    Vector3 auxPos = mNode->getPosition();
+    const Vector3 auxPos = mNode->getPosition();
     // Enemigo Centrado
     if (((int)auxPos.x % 98 == 0) && ((int)auxPos.y % 98 == 0))
     {
@@ -32,29 +32,15 @@ void Enemy::nextDirection()
 {
     Vector3 auxDir;
     double distance = lab_->diagonal().length();
-    if (!lab_->getNextEntity(getPosition() + (Vector3(1, 0, 0) * 98))->isWall() &&
-        distance > (lab_->getSinbad()->getPosition() - (getPosition() + (Vector3(1, 0, 0) * 98))).length()) {
 
-        distance = (lab_->getSinbad()->getPosition() - getPosition()).length();
-        auxDir = Vector3(1, 0, 0);
-    }
-    if (!lab_->getNextEntity(getPosition() + (Vector3(-1, 0, 0) * 98))->isWall() && 
-        distance > (lab_->getSinbad()->getPosition() - (getPosition() + (Vector3(-1, 0, 0) * 98))).length()) {
+    for(auto direction : directions_)
+    {
+        if (!lab_->getNextEntity(getPosition() + (direction * 98))->isWall() &&
+            distance > (lab_->getSinbad()->getPosition() - (getPosition() + (direction * 98))).length()) {
 
-        distance = (lab_->getSinbad()->getPosition() - getPosition()).length();
-        auxDir = Vector3(-1, 0, 0);
-    }
-    if (!lab_->getNextEntity(getPosition() + (Vector3(0, 1, 0) * 98))->isWall() && 
-        distance > (lab_->getSinbad()->getPosition() - (getPosition() + (Vector3(0, 1, 0) * 98))).length()) {
-
-        distance = (lab_->getSinbad()->getPosition() - getPosition()).length();
-        auxDir = Vector3(0, 1, 0);
-    }
-    if (!lab_->getNextEntity(getPosition() + (Vector3(0, -1, 0) * 98))->isWall() && 
-        distance > (lab_->getSinbad()->getPosition() - (getPosition() + (Vector3(0, -1, 0) * 98))).length()) {
-
-        distance = (lab_->getSinbad()->getPosition() - getPosition()).length();
-        auxDir = Vector3(0, -1, 0);
+            distance = (lab_->getSinbad()->getPosition() - getPosition()).length();
+            auxDir = direction;
+        }
     }
 
     nextDir_ = auxDir;

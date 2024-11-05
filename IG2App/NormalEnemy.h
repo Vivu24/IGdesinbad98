@@ -4,6 +4,6 @@ class NormalEnemy :
     public Enemy
 {
 public:
-    NormalEnemy(Vector3 initPos, SceneNode* node, SceneManager* mSM);
+    NormalEnemy(const Vector3& initPos, SceneNode* node, SceneManager* mSM, int vel = 1);
 };
 

@@ -4,27 +4,29 @@
 
 
 // Constructora Normal
-MovableEntity::MovableEntity(Vector3 initPos, SceneNode* node, SceneManager* mSM, string mesh)
-    : IG2Object(initPos, node, mSM, mesh), lifes_(3), dir_(1, 0, 0), nextDir_(dir_), lab_(nullptr), walled_(false)
+MovableEntity::MovableEntity(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const string& mesh, int vel)
+    : IG2Object(initPos, node, mSM, mesh), dir_(1, 0, 0), nextDir_(dir_), lab_(nullptr), lifes_(3), vel_(vel), walled_(false)
 {
+    directions_ = { Vector3(1, 0, 0), Vector3(-1, 0, 0), Vector3(0, 1, 0), Vector3(0, -1, 0) };
     mNode->rotate(getOrientation().getRotationTo(dir_));
     mNode->roll(Degree(90));
 }
 
 // Constructora Boss
-MovableEntity::MovableEntity(Vector3 initPos, SceneNode* node, SceneManager* mSM)
-    : IG2Object(initPos, node, mSM), lifes_(3), dir_(1, 0, 0), nextDir_(dir_), lab_(nullptr), walled_(false)
+MovableEntity::MovableEntity(const Vector3& initPos, SceneNode* node, SceneManager* mSM, int vel)
+    : IG2Object(initPos, node, mSM), dir_(1, 0, 0), nextDir_(dir_), lab_(nullptr), lifes_(3), vel_(vel), walled_(false)
 {
+    directions_ = { Vector3(1, 0, 0), Vector3(-1, 0, 0), Vector3(0, 1, 0), Vector3(0, -1, 0) };
     mNode->rotate(getOrientation().getRotationTo(dir_));
     mNode->roll(Degree(90));
 }
 
 bool MovableEntity::intersection()
 {
-    return !(((!lab_->getNextEntity(getPosition() + (Vector3(1, 0, 0) * 98))->isWall() && !lab_->getNextEntity(getPosition() + (Vector3(-1, 0, 0) * 98))->isWall()) &&
-        (lab_->getNextEntity(getPosition() + (Vector3(0, 1, 0) * 98))->isWall() && lab_->getNextEntity(getPosition() + (Vector3(0, -1, 0) * 98))->isWall())) ||
-        ((!lab_->getNextEntity(getPosition() + (Vector3(0, 1, 0) * 98))->isWall() && !lab_->getNextEntity(getPosition() + (Vector3(0, -1, 0) * 98))->isWall()) &&
-        (lab_->getNextEntity(getPosition() + (Vector3(1, 0, 0) * 98))->isWall() && lab_->getNextEntity(getPosition() + (Vector3(-1, 0, 0) * 98))->isWall())));
+    return !(((!lab_->getNextEntity(getPosition() + (directions_[0] * 98))->isWall() && !lab_->getNextEntity(getPosition() + (directions_[1] * 98))->isWall()) &&
+        (lab_->getNextEntity(getPosition() + (directions_[2] * 98))->isWall() && lab_->getNextEntity(getPosition() + (directions_[3] * 98))->isWall())) ||
+        ((!lab_->getNextEntity(getPosition() + (directions_[2] * 98))->isWall() && !lab_->getNextEntity(getPosition() + (directions_[3] * 98))->isWall()) &&
+        (lab_->getNextEntity(getPosition() + (directions_[0] * 98))->isWall() && lab_->getNextEntity(getPosition() + (directions_[1] * 98))->isWall())));
 }
 
 void MovableEntity::checkMovement()
@@ -36,20 +38,18 @@ void MovableEntity::checkMovement()
         if (nextLabEntity->isWall())
         {
             walled_ = true;
-            //cout << "Wall" << endl;
         }
         else if (!nextLabEntity->isWall() || nextLabEntity == nullptr)
         {
             walled_ = false;
             dir_ = nextDir_;
             mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
-            //cout << "NoWall" << endl;
         }
     }
 
 }
 
-void MovableEntity::move(Vector3 direction)
+void MovableEntity::move(const Vector3& direction) const
 {
-    mNode->translate(direction * 2);
+    mNode->translate(direction * vel_);
 }

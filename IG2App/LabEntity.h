@@ -3,7 +3,7 @@
 class LabEntity : public IG2Object
 {
 public:
-	LabEntity(Vector3 initPos, SceneNode* node, SceneManager* mSM, string mesh, string mat);
+	LabEntity(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const string& mesh, const string& mat);
 	bool isDead_ = false;
 	virtual bool isWall() = 0;
 protected:

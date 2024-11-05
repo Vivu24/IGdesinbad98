@@ -1,7 +1,7 @@
 #include "Transformer.h"
 
-Transformer::Transformer(Vector3 initPos, SceneNode* node, SceneManager* mSM) :
-	Enemy(initPos, node, mSM), angle_(25), timer_(new Timer())
+Transformer::Transformer(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const int vel) :
+	Enemy(initPos, node, mSM, vel), angle_(25), timer_(new Timer())
 {
     auto nSol = mNode->createChildSceneNode();
 

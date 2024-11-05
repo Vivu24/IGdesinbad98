@@ -1,15 +1,14 @@
 #include "Sinbad.h"
 #include "Labyrinths.h"
 #include "LabEntity.h"
-#include "Pearl.h"
 
-Sinbad::Sinbad(Vector3 initPos, SceneNode* node, SceneManager* mSM) : 
-	MovableEntity(initPos, node, mSM, "Sinbad.mesh"), points_(0), mLightNode_(nullptr)
+Sinbad::Sinbad(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const int vel) : 
+	MovableEntity(initPos, node, mSM, "Sinbad.mesh", vel), points_(0), mLightNode_(nullptr)
 {
     std::cout << "Sinbad";
 }
 
-void Sinbad::addPoints(int p)
+void Sinbad::addPoints(const int p)
 {
     points_ += p;
 }
@@ -28,13 +27,12 @@ void Sinbad::collisions()
         currentLabEntity->setVisible(false);
         currentLabEntity->isDead_ = true;
 
-        //std::cout << "10 pts" << "\n";
         addPoints(10);
-        lab_->updateHUD();
+        lab_->updateHud();
     }
 }
 
-void Sinbad::updateLight()
+void Sinbad::updateLight() const
 {
     mLightNode_->setPosition(this->mNode->getPosition().x, this->mNode->getPosition().y, this->mNode->getPosition().z + 100);
 }

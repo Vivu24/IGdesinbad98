@@ -4,9 +4,8 @@
 class Pearl : public LabEntity
 {
 public:
-	Pearl(Vector3 initPos, SceneNode* node, SceneManager* mSM, string mat);
+	Pearl(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const string& mat);
 
 	bool isWall() override { return false; }
-private:
 };
 

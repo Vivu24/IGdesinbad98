@@ -12,14 +12,14 @@ using namespace std;
 class Labyrinths
 {
 public:
-	Labyrinths(string archivo, Ogre::SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb);
+	Labyrinths(const string& archivo, Ogre::SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb);
 	
-	Vector3 diagonal() { return Vector3(numColumnas * 98, numFilas * 98, 0); }
-	Sinbad* getSinbad() { return sinbad_; }
-	Vector3 getCenter() { return Vector3(numFilas * 49, numColumnas * 49, 0); };
-	LabEntity* getNextEntity(Vector3 next);
+	Vector3 diagonal() const { return Vector3(numColumnas * 98, numFilas * 98, 0); }
+	Sinbad* getSinbad() const { return sinbad_; }
+	Vector3 getCenter() const { return Vector3(numFilas * 49, numColumnas * 49, 0); };
+	LabEntity* getNextEntity(const Vector3& next) const;
 	std::vector<MovableEntity*> getMovableEntities() { return enemies_; };
-	void updateHUD();
+	void updateHud() const;
 
 private:
 	int numFilas;
@@ -36,16 +36,16 @@ private:
 	OgreBites::TextBox* textBox_ = nullptr;
 
 	// Texture
-	string floorMat_ = "";
-	string wallMat_ = "";
-	string pearlMat_ = "";
+	string floorMat_;
+	string wallMat_;
+	string pearlMat_;
 
 	// Light
-	string lightType_ = "";
-	Ogre::Light* light_ = nullptr;
-	Ogre::SceneNode* mLightNode_ = nullptr;
+	string lightType_;
+	Ogre::Light* light_;
+	Ogre::SceneNode* mLightNode_;
 
-	void read(string archivo);
-	void initLight(string light);
+	void read(const string& archivo);
+	void initLight(const string& light);
 };
 

@@ -4,9 +4,8 @@
 class Wall : public LabEntity
 {
 public:
-	Wall(Vector3 initPos, SceneNode* node, SceneManager* mSM, string mat);
+	Wall(const Vector3& initPos, SceneNode* node, SceneManager* mSM, const string& mat);
 
 	bool isWall() override { return true; }
-private:
 };
 
