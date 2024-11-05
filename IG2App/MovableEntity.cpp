@@ -8,8 +8,8 @@ MovableEntity::MovableEntity(const Vector3& initPos, SceneNode* node, SceneManag
     : IG2Object(initPos, node, mSM, mesh), dir_(1, 0, 0), nextDir_(dir_), lab_(nullptr), lifes_(3), vel_(vel), walled_(false)
 {
     directions_ = { Vector3(1, 0, 0), Vector3(-1, 0, 0), Vector3(0, 1, 0), Vector3(0, -1, 0) };
-    mNode->rotate(getOrientation().getRotationTo(dir_));
-    mNode->roll(Degree(90));
+    mNode->pitch(Degree(90));
+    mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
 }
 
 // Constructora Boss
@@ -17,8 +17,8 @@ MovableEntity::MovableEntity(const Vector3& initPos, SceneNode* node, SceneManag
     : IG2Object(initPos, node, mSM), dir_(1, 0, 0), nextDir_(dir_), lab_(nullptr), lifes_(3), vel_(vel), walled_(false)
 {
     directions_ = { Vector3(1, 0, 0), Vector3(-1, 0, 0), Vector3(0, 1, 0), Vector3(0, -1, 0) };
-    mNode->rotate(getOrientation().getRotationTo(dir_));
-    mNode->roll(Degree(90));
+    mNode->pitch(Degree(90));
+    mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
 }
 
 bool MovableEntity::intersection()
@@ -43,7 +43,7 @@ void MovableEntity::checkMovement()
         {
             walled_ = false;
             dir_ = nextDir_;
-            mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
+            mNode->rotate(getOrientation().getRotationTo(dir_, Vector3(0, 0, 1)), Ogre::Node::TS_WORLD);
         }
     }
 
