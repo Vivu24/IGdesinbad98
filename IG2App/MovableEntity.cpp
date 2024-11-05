@@ -42,7 +42,7 @@ void MovableEntity::checkMovement()
         {
             walled_ = false;
             dir_ = nextDir_;
-            mNode->rotate(getOrientation().getRotationTo(dir_), Ogre::Node::TS_WORLD);
+            2012
             //cout << "NoWall" << endl;
         }
     }

@@ -1,92 +1,88 @@
 #include "Transformer.h"
 
 Transformer::Transformer(Vector3 initPos, SceneNode* node, SceneManager* mSM) :
-	Enemy(initPos, node, mSM)
+	Enemy(initPos, node, mSM), angle_(25), timer_(new Timer())
 {
-#pragma region Nodos
-    ///NODOS
-    //Nodo padre
-    auto Ncuerpo = mNode->createChildSceneNode();
+    auto nSol = mNode->createChildSceneNode();
 
-    //Nodos atachados al cuerpo
-    Nnudo1 = Ncuerpo->createChildSceneNode();  //Vamos a rotar estos dos por lo que a lo mejor 
-    Nnudo2 = Ncuerpo->createChildSceneNode();  //nos interesa guardarlo
+    nPlaneta = nSol->createChildSceneNode();
+    nPlaneta2 = nSol->createChildSceneNode();  
 
-    auto Npet = Ncuerpo->createChildSceneNode();    //Queremos que vaya junto a su dueno
+    auto fuego = nPlaneta->createChildSceneNode(); 
+    auto aire = nPlaneta->createChildSceneNode();
+    auto tierra = nPlaneta->createChildSceneNode();
 
-    auto Narma1 = Ncuerpo->createChildSceneNode();
+    auto fuego2 = nPlaneta2->createChildSceneNode();
+    auto aire2 = nPlaneta2->createChildSceneNode();
+    auto tierra2 = nPlaneta2->createChildSceneNode();
 
-    auto Npat1_1 = Ncuerpo->createChildSceneNode();
-    auto Npat1_2 = Ncuerpo->createChildSceneNode();
-
-    //Nodos atachados al pet
-    auto Narma2 = Npet->createChildSceneNode();
-
-    auto Npat2_1 = Npet->createChildSceneNode();
-    auto Npat2_2 = Npet->createChildSceneNode();
-#pragma endregion
+    auto cola = nSol->createChildSceneNode();
 
 
-#pragma region Entidades
-    //Cuerpo del enemigo
     Entity* Cuerpo = mSM->createEntity("sphere.mesh");
-    Ncuerpo->attachObject(Cuerpo);
-    Ncuerpo->setScale(Vector3(0.25, 0.25, 0.25));
-    Ncuerpo->yaw(Ogre::Degree(180));
+    nSol->attachObject(Cuerpo);
+    nSol->setScale(Vector3(0.2, 0.2, 0.2));
 
-    Entity* Nudo = mSM->createEntity("knot.mesh");
-    Nnudo1->attachObject(Nudo);
-    Nnudo1->setScale(Vector3(1, 1, 1) * NodeScale);
-    Nnudo1->setPosition(Vector3(1, 15, -55));
+    Entity* Saturno = mSM->createEntity("sphere.mesh");
+    nPlaneta->attachObject(Saturno);
+    nPlaneta->setScale(Vector3(0.25, 0.25, 0.25));
+    nPlaneta->setPosition(Vector3(150, 0, 0));
 
-    Entity* Nudo2 = mSM->createEntity("knot.mesh");
-    Nnudo2->attachObject(Nudo2);
-    Nnudo2->setScale(Vector3(1, 1, 1) * NodeScale);
-    Nnudo2->rotate(Quaternion(Radian(15), Vector3(1, 0, 1)));  //Lo giramos para que no esten exactamente iguales
-    Nnudo2->setPosition(Vector3(1, 15, -55));
+    Entity* Neptuno = mSM->createEntity("sphere.mesh");
+    nPlaneta2->attachObject(Neptuno);
+    nPlaneta2->setScale(Vector3(0.25, 0.25, 0.25));
+    nPlaneta2->setPosition(Vector3(-150, 0, 0));
 
+    Entity* f = mSM->createEntity("ogrehead.mesh");
+    fuego->attachObject(f);
+    fuego->setPosition(Vector3(0, Saturno->getBoundingRadius(), 0));
+    fuego->setScale(Vector3(2, 2, 2));
 
-    Entity* Pet = mSM->createEntity("penguin.mesh");
-    Npet->attachObject(Pet);
-    Npet->yaw(Degree(180));
-    Npet->setScale(Vector3(1, 1, 1) * PetScale);
-    Npet->setPosition(Vector3(-2, 1, -55));
+    Entity* a = mSM->createEntity("ogrehead.mesh");
+    aire->attachObject(a);
+    aire->setScale(Vector3(2, 2, 2));
+    aire->roll(Degree(90));
+    aire->setPosition(-Vector3(Saturno->getBoundingRadius(), 0, 0));
 
+    Entity* t = mSM->createEntity("ogrehead.mesh");
+    tierra->attachObject(t);
+    tierra->setScale(Vector3(2, 2, 2));
+    tierra->roll(Degree(-90));
+    tierra->setPosition(Vector3(Saturno->getBoundingRadius(), 0, 0));
 
-    Entity* Arma = mSM->createEntity("spine.mesh");
-    Narma1->attachObject(Arma);
-    Narma1->setScale(Vector3(1, 2, 1) * ArmaScale);
-    Narma1->rotate(Quaternion(Radian(40), Vector3(0, 0, 1)));
-    Narma1->setPosition(Vector3(6, 15, -57));
+    Entity* f2 = mSM->createEntity("ogrehead.mesh");
+    fuego2->attachObject(f2);
+    fuego2->setPosition(Vector3(0, Neptuno->getBoundingRadius(), 0));
+    fuego2->setScale(Vector3(2, 2, 2));
 
-    Entity* Arma2 = mSM->createEntity("spine.mesh");
-    Narma2->attachObject(Arma2);
-    Narma2->setScale(Vector3(5, 10, 5) * ArmaScale);
-    Narma2->rotate(Quaternion(Radian(-0.5), Vector3(0, 0, 1)));
-    Narma2->setPosition(Vector3(20, -10, 0));
+    Entity* a2 = mSM->createEntity("ogrehead.mesh");
+    aire2->attachObject(a2);
+    aire2->setScale(Vector3(2, 2, 2));
+    aire2->roll(Degree(90));
+    aire2->setPosition(-Vector3(Neptuno->getBoundingRadius(), 0, 0));
 
-    Entity* Patines1_1 = mSM->createEntity("sphere.mesh");
-    Npat1_1->attachObject(Patines1_1);
-    Npat1_1->setScale(Vector3(0.5, 1, 2) * PatScale);
-    Npat1_1->rotate(Quaternion(Radian(-0.25), Vector3(5, -1, 0)));
-    Npat1_1->setPosition(Vector3(5, 0, -50));
+    Entity* t2 = mSM->createEntity("ogrehead.mesh");
+    tierra2->attachObject(t2);
+    tierra2->setScale(Vector3(2, 2, 2));
+    tierra2->roll(Degree(-90));
+    tierra2->setPosition(Vector3(Neptuno->getBoundingRadius(), 0, 0));
 
-    Entity* Patines1_2 = mSM->createEntity("sphere.mesh");
-    Npat1_2->attachObject(Patines1_2);
-    Npat1_2->setScale(Vector3(0.5, 1, 2) * PatScale);
-    Npat1_2->rotate(Quaternion(Radian(-0.25), Vector3(1, 1, 0)));
-    Npat1_2->setPosition(Vector3(0, -1.5, -55));
+    Entity* c = mSM->createEntity("knot.mesh");
+    cola->attachObject(c);
+    cola->setScale(Vector3(0.5, 0.5, 0.5));
+    cola->setPosition(Vector3(0, 0, -Cuerpo->getBoundingRadius() + 50));
+}
 
-    Entity* Patines2_1 = mSM->createEntity("sphere.mesh");
-    Npat2_1->attachObject(Patines2_1);
-    Npat2_1->setScale(Vector3(5, 10, 20) * PatScale);
-    Npat2_1->rotate(Quaternion(Radian(-0.25), Vector3(0, 1, 0)));
-    Npat2_1->setPosition(Vector3(-12, -28, 10));
+void Transformer::frameRendered(const Ogre::FrameEvent& evt)
+{
+    nPlaneta->rotate(Quaternion(Radian(angle_), Vector3(0, 0, 1)));
+    nPlaneta2->rotate(Quaternion(Radian(-angle_), Vector3(0, 0, 1)));
 
-    Entity* Patines2_2 = mSM->createEntity("sphere.mesh");
-    Npat2_2->attachObject(Patines2_2);
-    Npat2_2->setScale(Vector3(5, 10, 20) * PatScale);
-    Npat2_2->rotate(Quaternion(Radian(-0.25), Vector3(0, -1, 0)));
-    Npat2_2->setPosition(Vector3(12, -28, 10));
-#pragma endregion
+    if (timer_->getMilliseconds() >= 10000) 
+    {
+        timer_->reset();
+        angle_ *= -1;
+    }
+
+    Enemy::frameRendered(evt);
 }
