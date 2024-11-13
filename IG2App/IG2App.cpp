@@ -323,7 +323,7 @@ void IG2App::setupScene(void){
     mCube->setScale(1, 1, 1);*/
 
     // Sinbad
-    mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM);
+    mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM, 2);
 
     // Laberinto
     mLab = new Labyrinths("stage1.txt", mSM, mSinbad, mTextBox);

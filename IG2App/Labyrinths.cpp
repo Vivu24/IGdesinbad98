@@ -83,7 +83,7 @@ void Labyrinths::read(const string& archivo)
             lab_.push_back(pearl);
         }
         else if (valor == 'v') {
-            MovableEntity* enemy = new NormalEnemy(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
+            MovableEntity* enemy = new NormalEnemy(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, 2);
             enemy->setLab(this);
             enemies_.push_back(enemy);
 
@@ -92,7 +92,7 @@ void Labyrinths::read(const string& archivo)
             lab_.push_back(pearl);
         }
         else if (valor == 'V') {
-            MovableEntity* enemy = new Transformer(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
+            MovableEntity* enemy = new Transformer(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, 2);
             enemy->setLab(this);
             enemies_.push_back(enemy);
 
