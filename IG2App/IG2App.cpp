@@ -376,7 +376,7 @@ void IG2App::setupGame()
 
 
     // Sinbad
-    mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM);
+    mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM, 2);
 
     // Laberinto
     mLab = new Labyrinths(mSM, mSinbad, mTextBox, numFilas, numColumnas, lightType_, mLabTypes);
