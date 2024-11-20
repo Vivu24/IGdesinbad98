@@ -4,6 +4,8 @@
 using namespace Ogre;
 using namespace std;
 
+std::vector<std::string> IG2App::mTextures;
+
 bool IG2App::keyPressed(const OgreBites::KeyboardEvent& evt){
         
     // ESC key finished the rendering...
@@ -64,39 +66,25 @@ void IG2App::setupScene(void){
     
     //------------------------------------------------------------------------
     // Creating the camera
-    
+
     Camera* cam = mSM->createCamera("Cam");
     cam->setNearClipDistance(1);
     cam->setFarClipDistance(10000);
     cam->setAutoAspectRatio(true);
     //cam->setPolygonMode(Ogre::PM_WIREFRAME);
-            
+
     mCamNode = mSM->getRootSceneNode()->createChildSceneNode("nCam");
     mCamNode->attachObject(cam);
 
-    
+
     // and tell it to render into the main window
     Viewport* vp = getRenderWindow()->addViewport(cam);
-    
+
     vp->setBackgroundColour(Ogre::ColourValue(0.7, 0.8, 0.9));
 
     mCamMgr = new OgreBites::CameraMan(mCamNode);
     addInputListener(mCamMgr);
     mCamMgr->setStyle(OgreBites::CS_ORBIT);
-    
-    
-    //------------------------------------------------------------------------
-    //// Creating the light
-    //
-    ////mSM->setAmbientLight(ColourValue(0.5, 0.5, 0.5));
-    //Light* luz = mSM->createLight("Luz");
-    //luz->setType(Ogre::Light::LT_DIRECTIONAL);
-    //luz->setDiffuseColour(0.75, 0.75, 0.75);
-
-    //mLightNode = mSM->getRootSceneNode()->createChildSceneNode("nLuz");
-    ////mLightNode = mCamNode->createChildSceneNode("nLuz");
-    //mLightNode->attachObject(luz);
-    //mLightNode->setDirection(Ogre::Vector3(0, 0, -1));
     
 
 #pragma region P0
@@ -322,11 +310,76 @@ void IG2App::setupScene(void){
     mCube->showBoundingBox(true);
     mCube->setScale(1, 1, 1);*/
 
+#pragma endregion
+    
+
+    // P2
+    read("stage1.txt");
+    setupIntro();
+}
+
+void IG2App::setupIntro()
+{
+    // Creating the light
+    
+    //mSM->setAmbientLight(ColourValue(0.5, 0.5, 0.5));
+    Light* luz = mSM->createLight("Luz");
+    luz->setType(Ogre::Light::LT_DIRECTIONAL);
+    luz->setDiffuseColour(0.75, 0.75, 0.75);
+
+    mLightNode = mSM->getRootSceneNode()->createChildSceneNode("nLuz");
+    //mLightNode = mCamNode->createChildSceneNode("nLuz");
+    mLightNode->attachObject(luz);
+    mLightNode->setDirection(Ogre::Vector3(0, 0, -1));
+
+    // PLANO
+    MeshManager::getSingleton().createPlane(
+        "mPlane150x300",
+        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+        Plane(Vector3::UNIT_Z, 0),
+        150, 300,
+        100, 80,
+        true,
+        1,
+        5.0, 5.0,
+        Vector3::UNIT_Y
+    );
+
+    Entity* planeEntity = mSM->createEntity("floor", "mPlane150x300");
+    planeEntity->setMaterialName(mTextures[MURO]);
+    SceneNode* planeNode = mSM->getRootSceneNode()->createChildSceneNode("floorNode");
+    planeNode->attachObject(planeEntity);
+    planeNode->pitch(Degree(-90));
+    planeNode->roll(Degree(90));
+    planeNode->setPosition(Vector3(0, -26, 15));
+
+
+    // SINBAD
+    Entity* sinbad = mSM->createEntity("Sinbad.mesh");
+
+    Entity* sword = mSM->createEntity("Sword.mesh");
+    sinbad->attachObjectToBone("Handle.R", sword);
+
+    SceneNode* sinNode = mSM->getRootSceneNode()->createChildSceneNode("sinNode");
+    sinNode->attachObject(sinbad);
+    sinNode->setScale(Vector3(3, 3, 3));
+    sinNode->setPosition(Vector3(0, (sinbad->getBoundingBox().getMaximum().y - sinbad->getBoundingBox().getMinimum().y) * 3 / 2 - 25, 15));
+
+    // CONBAD
+    
+}
+
+void IG2App::setupGame()
+{   
+    // Limpiamos Escena
+    mSM->clearScene();
+
+
     // Sinbad
     mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM);
 
     // Laberinto
-    mLab = new Labyrinths("stage1.txt", mSM, mSinbad, mTextBox);
+    mLab = new Labyrinths(mSM, mSinbad, mTextBox, numFilas, numColumnas, lightType_, mLabTypes);
 
     // Listeners
     addInputListener(mSinbad);
@@ -337,11 +390,31 @@ void IG2App::setupScene(void){
     mCamNode->setPosition(auxLabPos.x, auxLabPos.y, auxLabPos.z + 3000);
     mCamNode->lookAt(auxLabPos, Ogre::Node::TS_WORLD);
 
+}
 
+void IG2App::read(const string& archivo)
+{
+    ifstream fich(archivo);
+    if (!fich.is_open())
+    {
+        cout << "Error al abrir archivo\n";
+        exit(EXIT_FAILURE);
+    }
 
+    mTextures.reserve(3);
 
-#pragma endregion
+    fich >> numFilas 
+        >> numColumnas
+        >> mTextures[PERLA]
+        >> mTextures[MURO]
+        >> mTextures[SUELO]
+        >> lightType_;
 
+    char valor;
+    while (fich >> valor)
+    {
+        mLabTypes.push_back(valor);
+    }
 }
 
 

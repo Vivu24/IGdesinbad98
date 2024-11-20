@@ -12,7 +12,7 @@ using namespace std;
 class Labyrinths
 {
 public:
-	Labyrinths(const string& archivo, Ogre::SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb);
+	Labyrinths(Ogre::SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb, int f, int c, string l, std::vector<char>& types);
 	
 	Vector3 diagonal() const { return Vector3(numColumnas * 98, numFilas * 98, 0); }
 	Sinbad* getSinbad() const { return sinbad_; }
@@ -35,17 +35,12 @@ private:
 
 	OgreBites::TextBox* textBox_ = nullptr;
 
-	// Texture
-	string floorMat_;
-	string wallMat_;
-	string pearlMat_;
-
 	// Light
 	string lightType_;
 	Ogre::Light* light_;
 	Ogre::SceneNode* mLightNode_;
 
-	void read(const string& archivo);
+	void create(std::vector<char>& t);
 	void initLight(const string& light);
 };
 

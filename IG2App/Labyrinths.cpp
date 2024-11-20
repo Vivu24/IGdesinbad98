@@ -8,11 +8,11 @@
 #include "NormalEnemy.h"
 #include "Transformer.h"
 
-Labyrinths::Labyrinths(const string& archivo, SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb) : 
-    sinbad_(sinbad), mSM_(mSM), textBox_(tb)
+Labyrinths::Labyrinths(SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb, int f, int c, string l, std::vector<char>& types) : 
+    numFilas(f), numColumnas(c), sinbad_(sinbad), mSM_(mSM), textBox_(tb), lightType_(l)
 {
     node_ = mSM_->getRootSceneNode()->createChildSceneNode("nLabyrinth");
-    read(archivo);
+    create(types);
 
     MeshManager::getSingleton().createPlane(
         "mPlane1080x800",
@@ -28,7 +28,7 @@ Labyrinths::Labyrinths(const string& archivo, SceneManager* mSM, Sinbad* sinbad,
 
     // Floor
     Entity* planeEntity = mSM->createEntity("floor", "mPlane1080x800");
-    planeEntity->setMaterialName(floorMat_);
+    planeEntity->setMaterialName(IG2App::getTexture(IG2App::SUELO));
     SceneNode* planeNode = mSM->getRootSceneNode()->createChildSceneNode("floorNode");
     planeNode->attachObject(planeEntity);
     planeNode->setPosition(Vector3(numColumnas * 49 + 49, numFilas * 49 + 49, -48));
@@ -47,61 +47,52 @@ LabEntity* Labyrinths::getNextEntity(const Vector3& next) const
     else return lab_[i];
 }
 
-void Labyrinths::read(const string& archivo)
+void Labyrinths::create(std::vector<char>& t)
 {
-    ifstream fich(archivo);
-    if (!fich.is_open())
-    {
-        cout << "Error al abrir archivo\n";
-        exit(EXIT_FAILURE);
-    }
-
-    fich >> numFilas >> numColumnas >> pearlMat_ >> wallMat_ >> floorMat_ >> lightType_;
-
-    char valor;
+    int a = 0;
     int j = numFilas; // fila
     int i = numColumnas; // columna
-    while (fich >> valor)
+    while (a < t.size())
     {
-        if (valor == 'x')
+        if (t[a] == 'x')
         {
-            LabEntity* wall = new Wall(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, wallMat_);
+            LabEntity* wall = new Wall(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, IG2App::getTexture(IG2App::MURO));
             lab_.push_back(wall);
         }
-        else if (valor == 'o') {
-            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
+        else if (t[a] == 'o') {
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, IG2App::getTexture(IG2App::PERLA));
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
         }
-        else if (valor == 'h') {
+        else if (t[a] == 'h') {
             sinbad_->setPosition(Vector3(i * 98, j * 98, 0));
             sinbad_->setScale(Vector3(8, 8, 8));
             sinbad_->setLab(this);
 
-            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, IG2App::getTexture(IG2App::PERLA));
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
         }
-        else if (valor == 'v') {
+        else if (t[a] == 'v') {
             MovableEntity* enemy = new NormalEnemy(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
             enemy->setLab(this);
             enemies_.push_back(enemy);
 
-            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, IG2App::getTexture(IG2App::PERLA));
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
         }
-        else if (valor == 'V') {
+        else if (t[a] == 'V') {
             MovableEntity* enemy = new Transformer(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_);
             enemy->setLab(this);
             enemies_.push_back(enemy);
 
-            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, pearlMat_);
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, IG2App::getTexture(IG2App::PERLA));
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
         }
 
-        cout << valor;
+        cout << t[a];
 
         --i;
 
@@ -112,10 +103,7 @@ void Labyrinths::read(const string& archivo)
             cout << '\n';
         }
 
-        if (!fich.good()) {
-            cout << "Error en la lectura del archivo" << endl;
-            break;
-        }
+        ++a;
     }
 
     //std::cout << "fin";

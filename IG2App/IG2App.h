@@ -24,11 +24,23 @@ public:
     explicit IG2App() : IG2ApplicationContext("IG2App") { };  // new -> setup()
     virtual ~IG2App() { };                                    // delete -> shutdown()
 
+    static string getTexture(int i) { return mTextures[i]; }
+
+    enum Textrues
+    {
+        PERLA,
+        MURO,
+        SUELO
+    };
+
 protected:
     virtual bool keyPressed(const OgreBites::KeyboardEvent& evt);  // InputListener
     virtual void setup();
     virtual void shutdown();
     virtual void setupScene();
+    void setupIntro();
+    void setupGame();
+    void read(const string& archivo);
 
     //Ogre::SceneNode* mSinbadNode = nullptr;
 
@@ -71,6 +83,11 @@ protected:
     OgreBites::Label* mLabel = nullptr;
     OgreBites::TextBox* mTextBox= nullptr;
     OgreBites::TrayManager* mHUDManager = nullptr;
+
+    string lightType_;
+    static std::vector<string> mTextures;
+    std::vector<char> mLabTypes;
+    int numFilas, numColumnas;
 };
 
 #endif
