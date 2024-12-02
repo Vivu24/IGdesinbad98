@@ -1,4 +1,5 @@
 #include "IG2App.h"
+#include "Emoted.h"
 #include "Labyrinths.h"
 
 using namespace Ogre;
@@ -330,43 +331,11 @@ void IG2App::setupIntro()
     mLightNode = mSM->getRootSceneNode()->createChildSceneNode("nLuz");
     //mLightNode = mCamNode->createChildSceneNode("nLuz");
     mLightNode->attachObject(luz);
-    mLightNode->setDirection(Ogre::Vector3(0, 0, -1));
-
-    // PLANO
-    MeshManager::getSingleton().createPlane(
-        "mPlane150x300",
-        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-        Plane(Vector3::UNIT_Z, 0),
-        150, 300,
-        100, 80,
-        true,
-        1,
-        5.0, 5.0,
-        Vector3::UNIT_Y
-    );
-
-    Entity* planeEntity = mSM->createEntity("floor", "mPlane150x300");
-    planeEntity->setMaterialName(mTextures[MURO]);
-    SceneNode* planeNode = mSM->getRootSceneNode()->createChildSceneNode("floorNode");
-    planeNode->attachObject(planeEntity);
-    planeNode->pitch(Degree(-90));
-    planeNode->roll(Degree(90));
-    planeNode->setPosition(Vector3(0, -26, 15));
+    mLightNode->setDirection(Ogre::Vector3(0, -1, 0));
 
 
-    // SINBAD
-    Entity* sinbad = mSM->createEntity("Sinbad.mesh");
-
-    Entity* sword = mSM->createEntity("Sword.mesh");
-    sinbad->attachObjectToBone("Handle.R", sword);
-
-    SceneNode* sinNode = mSM->getRootSceneNode()->createChildSceneNode("sinNode");
-    sinNode->attachObject(sinbad);
-    sinNode->setScale(Vector3(3, 3, 3));
-    sinNode->setPosition(Vector3(0, (sinbad->getBoundingBox().getMaximum().y - sinbad->getBoundingBox().getMinimum().y) * 3 / 2 - 25, 15));
-
-    // CONBAD
-    
+    Emoted* emoted = new Emoted(mSM, 0.5);
+    addInputListener(emoted);
 }
 
 void IG2App::setupGame()
@@ -401,14 +370,18 @@ void IG2App::read(const string& archivo)
         exit(EXIT_FAILURE);
     }
 
-    mTextures.reserve(3);
+    string perla, muro, suelo;
 
     fich >> numFilas 
         >> numColumnas
-        >> mTextures[PERLA]
-        >> mTextures[MURO]
-        >> mTextures[SUELO]
+        >> perla
+        >> muro
+        >> suelo
         >> lightType_;
+
+    mTextures.push_back(perla);
+    mTextures.push_back(muro);
+    mTextures.push_back(suelo);
 
     char valor;
     while (fich >> valor)
