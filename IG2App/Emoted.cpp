@@ -1,6 +1,7 @@
 #include "Emoted.h"
 #include <OgreInput.h>
 #include <OgreKeyFrame.h>
+#include <OgreParticleSystem.h>
 
 Emoted::Emoted(SceneManager* sm, double vel) :
     _mSM(sm), 
@@ -109,6 +110,15 @@ void Emoted::initScene()
 
 void Emoted::initAnim()
 {
+    ParticleSystem* pSys1 = _mSM->createParticleSystem("psSmoke", "example/smoookeParticle");
+    pSys1->setEmitting(true);
+    _headNode->attachObject(pSys1);
+
+    ParticleSystem* pSys2 = _mSM->createParticleSystem("psFire", "example/fireeeParticle");
+    pSys2->setEmitting(true);
+    _sinbadNode->attachObject(pSys2);
+
+
     Animation* animation;
     NodeAnimationTrack* track;
     TransformKeyFrame* kf;
