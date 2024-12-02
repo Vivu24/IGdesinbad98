@@ -61,6 +61,8 @@ void Emoted::frameRendered(const Ogre::FrameEvent& evt)
     _sinbadAnimationState->addTime(evt.timeSinceLastFrame);
     _animationStateRunTop->addTime(evt.timeSinceLastFrame);
     _animationStateRunBase->addTime(evt.timeSinceLastFrame);
+
+    _headAnimationState->addTime(evt.timeSinceLastFrame);
 }
 
 void Emoted::initScene()
@@ -99,17 +101,22 @@ void Emoted::initScene()
     _head = _mSM->createEntity("ogrehead.mesh");
     _headNode = _mSM->getRootSceneNode()->createChildSceneNode("headNode");
     _headNode->attachObject(_head);
-    _headNode->setPosition(Vector3(-90, 0, 0));
+    _headNode->setPosition(Vector3(-100, -10, 0));
+    _headNode->setScale(0.5, 0.5, 0.5);
     _headNode->yaw(Degree(90));
+    _headNode->setInitialState();
 }
 
 void Emoted::initAnim()
 {
-    Animation* animation = _mSM->createAnimation("sinbadWalking", _duration);
-    animation->setInterpolationMode(Ogre::Animation::IM_SPLINE);
-    NodeAnimationTrack* track = animation->createNodeTrack(0);
-    track->setAssociatedNode(_sinbadNode);
+    Animation* animation;
+    NodeAnimationTrack* track;
     TransformKeyFrame* kf;
+#pragma region Sinbad
+    animation = _mSM->createAnimation("sinbadWalking", _duration);
+    animation->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+    track = animation->createNodeTrack(0);
+    track->setAssociatedNode(_sinbadNode);
 
     // Keyframe 0
     kf = track->createNodeKeyFrame(0);
@@ -157,4 +164,46 @@ void Emoted::initAnim()
 
     _sinbadAnimationState = _sinbad->getAnimationState("Dance");
     _sinbadAnimationState->setEnabled(true);
+#pragma endregion
+
+#pragma region Head
+    animation = _mSM->createAnimation("headWalking", _duration + 5);
+    animation->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+    track = animation->createNodeTrack(1);
+    track->setAssociatedNode(_headNode);
+
+    // Keyframe 0 Quieto
+    kf = track->createNodeKeyFrame(0);
+
+    // Keyframe 1 Derecha
+    kf = track->createNodeKeyFrame(9);
+    _keyframePos += Ogre::Vector3::UNIT_X * _movementLength * 2;
+    kf->setTranslate(_keyframePos);
+
+    // Keyframe 2 Gira
+    kf = track->createNodeKeyFrame(10);
+    kf->setTranslate(_keyframePos);
+    kf->setRotation(Quaternion(Degree(180.0), Vector3(0, 1, 0)));
+
+    // Keyframe 3 Izquierda
+    kf = track->createNodeKeyFrame(16);
+    _keyframePos += Ogre::Vector3::NEGATIVE_UNIT_X * _movementLength * 2;
+    kf->setTranslate(_keyframePos);
+    kf->setRotation(Quaternion(Degree(180.0), Vector3(0, 1, 0)));
+
+    // Keyframe 4 Gira
+    kf = track->createNodeKeyFrame(17);
+    kf->setTranslate(_keyframePos);
+
+    // Keyframe 5 Derecha
+    kf = track->createNodeKeyFrame(21);
+    _keyframePos += Ogre::Vector3::UNIT_X * _movementLength * 2;
+    kf->setTranslate(_keyframePos);
+    kf->setScale(Vector3(0, 0, 0));
+
+    _headAnimationState = _mSM->createAnimationState("headWalking");
+    _headAnimationState->setEnabled(true);
+    _headAnimationState->setLoop(true);
+#pragma endregion
+
 }

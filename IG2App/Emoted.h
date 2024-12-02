@@ -20,6 +20,7 @@ private:
 	AnimationState* _sinbadAnimationState;
 	AnimationState* _animationStateRunTop;
 	AnimationState* _animationStateRunBase;
+	AnimationState* _headAnimationState;
 
 	int _movementLength;
 	Real _duration;
