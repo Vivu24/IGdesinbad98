@@ -66,6 +66,9 @@ void Emoted::frameRendered(const Ogre::FrameEvent& evt)
     _headAnimationState->addTime(evt.timeSinceLastFrame);
 }
 
+
+
+
 void Emoted::initScene()
 {
     // PLANO
@@ -83,7 +86,7 @@ void Emoted::initScene()
 
     Entity* planeEntity = _mSM->createEntity("suelo", "mPlane150x300");
     planeEntity->setMaterialName(IG2App::getTexture(IG2App::MURO));
-    SceneNode* planeNode = _mSM->getRootSceneNode()->createChildSceneNode("sueloNode");
+    planeNode = _mSM->getRootSceneNode()->createChildSceneNode("sueloNode");
     planeNode->attachObject(planeEntity);
     planeNode->pitch(Degree(-90));
     planeNode->roll(Degree(90));
@@ -108,15 +111,41 @@ void Emoted::initScene()
     _headNode->setInitialState();
 }
 
+void Emoted::createFires(SceneNode* parentNode, int numFires, float spacing) {
+    string particleName = "psFireCenter";
+    ParticleSystem* pSysCenter = _mSM->createParticleSystem(particleName, "example/fireeeParticle");
+    pSysCenter->setEmitting(true);
+
+    SceneNode* fireNodeCenter = parentNode->createChildSceneNode("fireNodeCenter");
+    fireNodeCenter->attachObject(pSysCenter);
+    fireNodeCenter->setPosition(Vector3(100, 0, 0));
+    fireNodeCenter->pitch(Degree(90));
+
+    fireParticles.push_back(pSysCenter);
+
+    for (int i = 0; i < numFires; ++i) {
+        std::string particleName = "psFire" + std::to_string(i);
+        ParticleSystem* pSys = _mSM->createParticleSystem(particleName, "example/fireeeParticle");
+        pSys->setEmitting(true);
+
+        SceneNode* fireNode = parentNode->createChildSceneNode("fireNode" + std::to_string(i));
+        fireNode->attachObject(pSys);
+
+        float offsetX = (i % 2 == 0 ? 1 : -1) * spacing * ((i / 2) + 1);
+        fireNode->setPosition(Vector3(100, offsetX, 0));
+        fireNode->pitch(Degree(90));
+
+        fireParticles.push_back(pSys);
+    }
+}
+
 void Emoted::initAnim()
 {
     ParticleSystem* pSys1 = _mSM->createParticleSystem("psSmoke", "example/smoookeParticle");
     pSys1->setEmitting(true);
     _headNode->attachObject(pSys1);
 
-    ParticleSystem* pSys2 = _mSM->createParticleSystem("psFire", "example/fireeeParticle");
-    pSys2->setEmitting(true);
-    _sinbadNode->attachObject(pSys2);
+    createFires(planeNode, 10, 25);
 
 
     Animation* animation;

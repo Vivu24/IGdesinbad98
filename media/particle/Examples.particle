@@ -6,6 +6,7 @@ particle_width 10
 particle_height 10
 quota 500
 material example/_mySmoke
+
 emitter Point{
 direction 0 0 -1
 position 0 0 0
@@ -16,6 +17,7 @@ velocity_min 50
 velocity_max 80
 colour 0.15 0.15 0.15 0.75
 duration 21
+repeat_delay 1 	
 }
 affector ColourFader{
 red 0.06
@@ -28,51 +30,41 @@ rate 50
 }
 }
 
-particle_system example/fireeeParticle{
-    billboard_type  	point
-    particle_width  	35
-    particle_height 	35
-    quota           	500
-    material        	fire	
-    emitter Point{
-        direction 0 1 0
-        position 0 0 0
-		angle 10
-		emission_rate 10
-		time_to_live 3
-		velocity_min 50
-		velocity_max 80  
-        duration 10
-        repeat_delay 5
-    }
-
-    affector ColourFader{
-        red 0.06
-        green 0.06
-        blue 0.06
-        alpha -0.06
-    }
-
-    affector ColourImage{
-        image smokecolors.png
-    }
-
-    affector Scaler{
-        rate 20
-        
-    }
-
-    affector Rotator{
-		rotation_speed_range_start -30
- 		rotation_speed_range_end 55
- 		rotation_range_start 60
- 		rotation_range_end 90
-	}
-
-
-    affector DirectionRandomiser{
-		randomness 5
-	}
+particle_system example/fireeeParticle
+{
+billboard_type point
+particle_width 25
+particle_height 25
+quota 500
+material example/_myFire
+sorted true
+    
+emitter Point{
+direction 0 1 0
+position 0 0 0
+angle 5
+emission_rate 20
+time_to_live 5 
+velocity_min 50
+velocity_max 80 
+duration 5 
+repeat_delay 1 	
+}
+affector ColourImage{
+image smokecolors.png
+}
+affector Rotator{
+rotation_range_start 50
+rotation_range_end 100
+rotation_speed_range_start -50
+rotation_speed_range_end 50
+}
+affector DirectionRandomiser{
+randomness 5
+}
+affector Scaler{
+rate 30
+}
 }
 
 // Exudes greeny particles which float upwards.
