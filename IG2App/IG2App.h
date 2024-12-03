@@ -69,6 +69,7 @@ protected:
     Sinbad* mSinbad = nullptr;
     Emoted* mEmoted = nullptr;
     Camera* mCam = nullptr;
+    Ogre::Real _time = 0;
     #pragma endregion
 
 

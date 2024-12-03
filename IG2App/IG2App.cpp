@@ -1,6 +1,7 @@
 #include "IG2App.h"
 #include "Emoted.h"
 #include "Labyrinths.h"
+#include <OgreTechnique.h>
 
 using namespace Ogre;
 using namespace std;

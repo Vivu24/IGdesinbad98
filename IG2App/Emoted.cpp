@@ -72,12 +72,21 @@ void Emoted::frameRendered(const Ogre::FrameEvent& evt)
 
 void Emoted::initScene()
 {
+    // ESFERA
+    Entity* sphereEntity = _mSM->createEntity("sphere", "uv_sphere.mesh");
+    SceneNode* sphereNode = _mSM->getRootSceneNode()->createChildSceneNode("sphereNode");
+    sphereNode->attachObject(sphereEntity);
+    sphereEntity->setMaterialName("corrosion");
+    sphereNode->setScale(0.25, 0.25, 0.25);
+    sphereNode->setPosition(0, 0, -50);
+
+
     // PLANO
     MeshManager::getSingleton().createPlane(
         "mPlane150x300",
         ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
         Plane(Vector3::UNIT_Z, 0),
-        150, 300,
+        600, 150,
         100, 80,
         true,
         1,
@@ -86,12 +95,13 @@ void Emoted::initScene()
     );
 
     Entity* planeEntity = _mSM->createEntity("suelo", "mPlane150x300");
-    planeEntity->setMaterialName(IG2App::getTexture(IG2App::MURO));
     _planeNode = _mSM->getRootSceneNode()->createChildSceneNode("sueloNode");
     _planeNode->attachObject(planeEntity);
     _planeNode->pitch(Degree(-90));
-    _planeNode->roll(Degree(90));
+    //_planeNode->roll(Degree(90));
     _planeNode->setPosition(Vector3(0, -26, 15));
+    _planeNode->setInitialState();
+    planeEntity->setMaterialName("practica2/wavesShader");
 
 
     // SINBAD
@@ -119,7 +129,7 @@ void Emoted::createFires(SceneNode* parentNode, int numFires, float spacing) {
 
     SceneNode* fireNodeCenter = parentNode->createChildSceneNode("fireNodeCenter");
     fireNodeCenter->attachObject(pSysCenter);
-    fireNodeCenter->setPosition(Vector3(100, 0, 0));
+    fireNodeCenter->setPosition(Vector3(0, 100, 0));
     fireNodeCenter->pitch(Degree(90));
 
     _fireParticles.push_back(pSysCenter);
@@ -133,7 +143,7 @@ void Emoted::createFires(SceneNode* parentNode, int numFires, float spacing) {
         fireNode->attachObject(pSys);
 
         float offsetX = (i % 2 == 0 ? 1 : -1) * spacing * ((i / 2) + 1);
-        fireNode->setPosition(Vector3(100, offsetX, 0));
+        fireNode->setPosition(Vector3(offsetX, 100, 0));
         fireNode->pitch(Degree(90));
 
         _fireParticles.push_back(pSys);

@@ -1,7 +1,211 @@
-material mat/floor{
+material example/_mySmoke
+{
+technique{
+pass{
+lighting off
+scene_blend alpha_blend
+depth_write off
+diffuse vertexcolour
+texture_unit{
+texture smoke.png
+tex_address_mode clamp
+}
+}
+}
+}
+
+material example/_myFire
+{
+technique{
+pass{
+lighting off
+scene_blend alpha_blend
+depth_write off
+diffuse vertexcolour
+texture_unit{
+texture smoke.png
+tex_address_mode clamp
+}
+}
+}
+}
+
+vertex_program SpaceSkyZoomLightVS glsl
+{ 
+    source SpaceSkyZoomLightVS.glsl 
+
+    default_params
+    {
+        param_named_auto modelViewProjMat worldviewproj_matrix
+        param_named_auto time sintime_0_2pi 60
+        param_named minZoom float 0.3 
+        param_named maxZoom float 1
+    }
+}
+
+fragment_program SpaceSkyZoomLightFS glsl
+{ 
+    source SpaceSkyZoomLightFS.glsl
+
+    default_params
+    {
+        param_named textureS int 0
+        param_named textureL int 1
+        param_named_auto time sintime_0_2pi 60
+        param_named minLight float 0.1 
+        param_named maxLight float 1
+    }
+}
+
+material practica2/spaceSkyZoomLightShader
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			
+			vertex_program_ref SpaceSkyZoomLightVS glsl 
+			{
+			}
+
+			fragment_program_ref SpaceSkyZoomLightFS glsl 
+			{
+			}
+
+			texture_unit
+			{
+				
+				texture spaceSky.jpg
+				scroll_anim 0.1 0.1
+				tex_adress_mode clamp
+				tex_coord_set 0
+			}
+
+			texture_unit
+			{
+				texture lightMap.jpg
+				scroll_anim 0.1 0.1
+				tex_adress_mode clamp
+				tex_coord_set 1
+			}
+		}
+	}
+}
+
+vertex_program CorrosionVS glsl
+{ 
+    source CorrosionVS.glsl 
+
+    default_params
+    {
+        param_named_auto modelViewProjMat worldviewproj_matrix
+    }
+}
+
+fragment_program CorrosionFS glsl
+{ 
+    source CorrosionFS.glsl
+
+    default_params
+    {        
+		param_named_auto flipping render_target_flipping
+		param_named textC int 0 
+		param_named textM int 1 
+		param_named textCara int 2
+    }
+}
+
+material corrosion
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			cull_hardware none
+            cull_software none
+			
+            vertex_program_ref CorrosionVS glsl
+			{
+			}
+
+            fragment_program_ref CorrosionFS glsl
+			{
+			}
+
+            texture_unit
+            { 
+                texture corrosion.jpg
+            }
+
+            texture_unit
+            { 
+                texture BumpyMetal.jpg
+            }
+
+			texture_unit
+            { 
+                texture spotlight_image.png
+			}
+		}
+	}
+}
+
+vertex_program WaterVS glsl
+{ 
+    source WaterVS.glsl 
+
+    default_params
+    {
+        param_named_auto modelViewProjMat worldviewproj_matrix
+        param_named_auto time sintime_0_2pi 50
+		//param_named_auto center vec2 0 0
+
+    }
+}
+
+fragment_program WaterFS glsl
+{ 
+    source WaterFS.glsl
+
+    default_params
+    {        
+		param_named textW int 0 
+    }
+}
+
+material practica2/wavesShader 
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			 
+            vertex_program_ref WaterVS 
+			{
+			}
+
+            fragment_program_ref WaterFS 
+			{
+			}
+
+            texture_unit
+            { 
+                texture Water02.jpg
+            }
+		}
+	}
+
+}
+
+material mat/floor
+{
     technique 
 	{ 
-		pass {  
+		pass 
+		{  
 			texture_unit 
 			{
 				texture grass.PNG				
