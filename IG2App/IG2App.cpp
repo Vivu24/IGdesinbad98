@@ -352,7 +352,7 @@ void IG2App::setupGame()
     mCamNode->attachObject(mCam);
 
     mCamMgr = new OgreBites::CameraMan(mCamNode);
-    addInputListener(mCamMgr);
+    //addInputListener(mCamMgr);
     mCamMgr->setStyle(OgreBites::CS_ORBIT);
 
     // Skyplane
@@ -364,7 +364,7 @@ void IG2App::setupGame()
     (
         true,
         plane,
-        "Examples/SpaceSkyPlane",
+        "practica2/spaceSkyZoomLightShader",
         10,
         1,
         true,

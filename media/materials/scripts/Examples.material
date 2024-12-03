@@ -1,4 +1,5 @@
-material example/_mySmoke{
+material example/_mySmoke
+{
 technique{
 pass{
 lighting off
@@ -13,7 +14,8 @@ tex_address_mode clamp
 }
 }
 
-material example/_myFire{
+material example/_myFire
+{
 technique{
 pass{
 lighting off
@@ -26,6 +28,48 @@ tex_address_mode clamp
 }
 }
 }
+}
+
+vertex_program SpaceSkyZoomLightVS glsl
+{
+	source SpaceSkyZoomLightVS.glsl
+
+	default_params
+	{
+		param_named_auto modelViewProjMat worldviewproj_matrix
+		param_named_auto zoomFactor int
+	}
+}
+
+material practica2/spaceSkyZoomLightShader
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			
+			vertex_program_ref SpaceSkyZoomLightVS glsl 
+			{
+
+			}
+
+			texture_unit
+			{
+				
+				texture spaceSky.jpg
+				scroll_anim 0.1 0.1
+				tex_adress_mode clamp
+			}
+
+			texture_unit
+			{
+				texture lightMap.jpg
+				scroll_anim 0.1 0.1
+				tex_adress_mode clamp
+			}
+		}
+	}
 }
 
 material Examples/SphereMappedRustySteel
@@ -440,11 +484,12 @@ material Examples/SpaceSkyPlane
 		pass
 		{
 			lighting off
-			depth_write off
+			depth_write off			
 
 			texture_unit
 			{
 				texture spacesky.jpg
+				scroll_anim 0.1 0.1				
 			}
 		}
 	}
