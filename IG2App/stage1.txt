@@ -5,7 +5,7 @@ mat/wall
 mat/floor
 pointLight
 xxxxxxxxxxxxxxxxxxx
-xooooooooxoooooooox
+xsssoooooxoooooooox
 xoxxoxxxoxoxxxoxxox
 xooooooooooooooooox
 xoxxoxoxxxxxoxoxxox

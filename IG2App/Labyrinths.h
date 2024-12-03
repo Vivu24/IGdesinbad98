@@ -27,6 +27,7 @@ private:
 
 	std::vector<LabEntity*> lab_;
 	std::vector<MovableEntity*> enemies_;
+	std::vector<ParticleSystem*> smokeParticles_;
 	Sinbad* sinbad_;
 
 	Ogre::SceneManager* mSM_;

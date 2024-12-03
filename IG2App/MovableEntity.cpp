@@ -23,10 +23,10 @@ MovableEntity::MovableEntity(const Vector3& initPos, SceneNode* node, SceneManag
 
 bool MovableEntity::intersection()
 {
-    return !(((!lab_->getNextEntity(getPosition() + (directions_[0] * 98))->isWall() && !lab_->getNextEntity(getPosition() + (directions_[1] * 98))->isWall()) &&
-        (lab_->getNextEntity(getPosition() + (directions_[2] * 98))->isWall() && lab_->getNextEntity(getPosition() + (directions_[3] * 98))->isWall())) ||
-        ((!lab_->getNextEntity(getPosition() + (directions_[2] * 98))->isWall() && !lab_->getNextEntity(getPosition() + (directions_[3] * 98))->isWall()) &&
-        (lab_->getNextEntity(getPosition() + (directions_[0] * 98))->isWall() && lab_->getNextEntity(getPosition() + (directions_[1] * 98))->isWall())));
+    return !(((!lab_->getNextEntity(getPosition() + (directions_[0] * 98))->isUncrossable() && !lab_->getNextEntity(getPosition() + (directions_[1] * 98))->isUncrossable()) &&
+        (lab_->getNextEntity(getPosition() + (directions_[2] * 98))->isUncrossable() && lab_->getNextEntity(getPosition() + (directions_[3] * 98))->isUncrossable())) ||
+        ((!lab_->getNextEntity(getPosition() + (directions_[2] * 98))->isUncrossable() && !lab_->getNextEntity(getPosition() + (directions_[3] * 98))->isUncrossable()) &&
+        (lab_->getNextEntity(getPosition() + (directions_[0] * 98))->isUncrossable() && lab_->getNextEntity(getPosition() + (directions_[1] * 98))->isUncrossable())));
 }
 
 void MovableEntity::checkMovement()
@@ -35,11 +35,11 @@ void MovableEntity::checkMovement()
     {
         LabEntity* nextLabEntity = lab_->getNextEntity(getPosition() + (nextDir_ * 98));
 
-        if (nextLabEntity->isWall())
+        if (nextLabEntity->isUncrossable())
         {
             walled_ = true;
         }
-        else if (!nextLabEntity->isWall() || nextLabEntity == nullptr)
+        else if (!nextLabEntity->isUncrossable() || nextLabEntity == nullptr)
         {
             walled_ = false;
             dir_ = nextDir_;

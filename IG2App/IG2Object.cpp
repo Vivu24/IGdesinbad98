@@ -48,6 +48,11 @@ Vector3 IG2Object::getPosition (){
     return mNode->getPosition();
 }
 
+SceneNode* IG2Object::getNode()
+{
+    return mNode;
+}
+
 void IG2Object::setScale(Vector3 vScale){
     mNode->setScale(vScale);
 }

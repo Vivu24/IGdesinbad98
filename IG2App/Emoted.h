@@ -17,9 +17,9 @@ private:
 	Entity* _head;
 	SceneNode* _sinbadNode;
 	SceneNode* _headNode;
-	SceneNode* planeNode;
+	SceneNode* _planeNode;
 
-	std::vector<ParticleSystem*> fireParticles;
+	std::vector<ParticleSystem*> _fireParticles;
 
 	AnimationState* _sinbadAnimationState;
 	AnimationState* _animationStateRunTop;
@@ -38,6 +38,7 @@ private:
 
 	void initScene();
 	void initAnim();
+	void initParticles();
 
 	void createFires(SceneNode* parentNode, int numFires, float spacing);
 };

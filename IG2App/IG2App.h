@@ -17,6 +17,7 @@
 #include "Sinbad.h"
 
 class Labyrinths;
+class Emoted;
 
 class IG2App : public  OgreBites::IG2ApplicationContext, OgreBites::InputListener{
 
@@ -62,10 +63,12 @@ protected:
     Ogre::SceneNode* mBB8JhonSnow = nullptr;*/
     #pragma endregion
 
-    #pragma region P1
+    #pragma region P2
     Ogre::SceneNode* mCube = nullptr;
     Labyrinths* mLab = nullptr;
     Sinbad* mSinbad = nullptr;
+    Emoted* mEmoted = nullptr;
+    Camera* mCam = nullptr;
     #pragma endregion
 
 

@@ -73,6 +73,8 @@ class IG2Object : public OgreBites::InputListener {
          * @return Position of this element.
          */
         Vector3 getPosition ();
+
+        SceneNode* getNode();
     
         /**
          * Sets the scale for this element.

@@ -11,6 +11,7 @@ Emoted::Emoted(SceneManager* sm, double vel) :
 {
 	initScene();
     initAnim();
+    initParticles();
 }
 
 void Emoted::frameRendered(const Ogre::FrameEvent& evt)
@@ -86,11 +87,11 @@ void Emoted::initScene()
 
     Entity* planeEntity = _mSM->createEntity("suelo", "mPlane150x300");
     planeEntity->setMaterialName(IG2App::getTexture(IG2App::MURO));
-    planeNode = _mSM->getRootSceneNode()->createChildSceneNode("sueloNode");
-    planeNode->attachObject(planeEntity);
-    planeNode->pitch(Degree(-90));
-    planeNode->roll(Degree(90));
-    planeNode->setPosition(Vector3(0, -26, 15));
+    _planeNode = _mSM->getRootSceneNode()->createChildSceneNode("sueloNode");
+    _planeNode->attachObject(planeEntity);
+    _planeNode->pitch(Degree(-90));
+    _planeNode->roll(Degree(90));
+    _planeNode->setPosition(Vector3(0, -26, 15));
 
 
     // SINBAD
@@ -121,7 +122,7 @@ void Emoted::createFires(SceneNode* parentNode, int numFires, float spacing) {
     fireNodeCenter->setPosition(Vector3(100, 0, 0));
     fireNodeCenter->pitch(Degree(90));
 
-    fireParticles.push_back(pSysCenter);
+    _fireParticles.push_back(pSysCenter);
 
     for (int i = 0; i < numFires; ++i) {
         std::string particleName = "psFire" + std::to_string(i);
@@ -135,19 +136,21 @@ void Emoted::createFires(SceneNode* parentNode, int numFires, float spacing) {
         fireNode->setPosition(Vector3(100, offsetX, 0));
         fireNode->pitch(Degree(90));
 
-        fireParticles.push_back(pSys);
+        _fireParticles.push_back(pSys);
     }
 }
 
-void Emoted::initAnim()
+void Emoted::initParticles()
 {
     ParticleSystem* pSys1 = _mSM->createParticleSystem("psSmoke", "example/smoookeParticle");
     pSys1->setEmitting(true);
     _headNode->attachObject(pSys1);
 
-    createFires(planeNode, 10, 25);
+    createFires(_planeNode, 10, 25);
+}
 
-
+void Emoted::initAnim()
+{
     Animation* animation;
     NodeAnimationTrack* track;
     TransformKeyFrame* kf;

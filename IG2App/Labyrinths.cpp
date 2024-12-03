@@ -7,6 +7,7 @@
 #include "Sinbad.h"
 #include "NormalEnemy.h"
 #include "Transformer.h"
+#include <OgreParticleSystem.h>
 
 Labyrinths::Labyrinths(SceneManager* mSM, Sinbad* sinbad, OgreBites::TextBox* tb, int f, int c, string l, std::vector<char>& types) : 
     numFilas(f), numColumnas(c), sinbad_(sinbad), mSM_(mSM), textBox_(tb), lightType_(l)
@@ -90,6 +91,17 @@ void Labyrinths::create(std::vector<char>& t)
             LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, IG2App::getTexture(IG2App::PERLA));
             pearl->setScale(Vector3(0.1, 0.1, 0.1));
             lab_.push_back(pearl);
+        }
+        else if (t[a] == 's') {
+            LabEntity* pearl = new Pearl(Vector3(i * 98, j * 98, 0), node_->createChildSceneNode(), mSM_, IG2App::getTexture(IG2App::PERLA));
+            pearl->setScale(Vector3(0.1, 0.1, 0.1));
+            lab_.push_back(pearl);
+
+            ParticleSystem* pSys = mSM_->createParticleSystem("psSmoke" + to_string(i) + to_string(j), "example/fooogyParticle");
+            pSys->setEmitting(true);
+            SceneNode* nSys = pearl->getNode()->createChildSceneNode();
+            nSys->attachObject(pSys);
+            nSys->setPosition(0, 0, 100);
         }
 
         cout << t[a];

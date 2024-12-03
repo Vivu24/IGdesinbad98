@@ -35,7 +35,7 @@ void Enemy::nextDirection()
 
     for(auto direction : directions_)
     {
-        if (!lab_->getNextEntity(getPosition() + (direction * 98))->isWall() &&
+        if (!lab_->getNextEntity(getPosition() + (direction * 98))->isUncrossable() &&
             distance > (lab_->getSinbad()->getPosition() - (getPosition() + (direction * 98))).length()) {
 
             distance = (lab_->getSinbad()->getPosition() - getPosition()).length();

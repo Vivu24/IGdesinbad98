@@ -67,6 +67,30 @@ rate 30
 }
 }
 
+particle_system example/fooogyParticle{
+billboard_type point
+particle_width 25
+particle_height 25
+quota 500
+material example/_mySmoke
+
+emitter Point{
+direction 0 0 0
+position 0 0 0
+angle 180
+emission_rate 3
+time_to_live 10
+velocity_min 50
+velocity_max 80
+colour 0.1 0.1 0.1 0.9
+duration 15
+repeat_delay 1 	
+}
+affector Scaler{
+rate 15
+}
+}
+
 // Exudes greeny particles which float upwards.
 particle_system Examples/GreenyNimbus
 {

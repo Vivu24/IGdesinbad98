@@ -4,8 +4,7 @@ material mat/floor{
 		pass {  
 			texture_unit 
 			{
-				texture grass.PNG
-				
+				texture grass.PNG				
 			}
 		}
     }
@@ -18,6 +17,14 @@ material mat/wall{
 			texture_unit 
 			{
 				texture floor_diffuse.PNG
+				
+				colour_op modulate
+			}
+			texture_unit 
+			{
+				texture flare.PNG
+
+				colour_op modulate
 				
 			}
 		}

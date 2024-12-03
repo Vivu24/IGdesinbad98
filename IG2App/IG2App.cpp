@@ -17,7 +17,12 @@ bool IG2App::keyPressed(const OgreBites::KeyboardEvent& evt){
         cout << "Position of Sinbad: " << mSinbad->getPosition() << endl;
         cout << "Position of the camera: " << mCamNode->getPosition() << endl;
     }
-    
+    else if (evt.keysym.sym == SDLK_s) {
+        removeInputListener(mEmoted);
+        removeInputListener(mCamMgr);
+        setupGame();
+    }
+
     return true;
 }
 
@@ -68,18 +73,18 @@ void IG2App::setupScene(void){
     //------------------------------------------------------------------------
     // Creating the camera
 
-    Camera* cam = mSM->createCamera("Cam");
-    cam->setNearClipDistance(1);
-    cam->setFarClipDistance(10000);
-    cam->setAutoAspectRatio(true);
+    mCam = mSM->createCamera("Cam");
+    mCam->setNearClipDistance(1);
+    mCam->setFarClipDistance(10000);
+    mCam->setAutoAspectRatio(true);
     //cam->setPolygonMode(Ogre::PM_WIREFRAME);
 
     mCamNode = mSM->getRootSceneNode()->createChildSceneNode("nCam");
-    mCamNode->attachObject(cam);
+    mCamNode->attachObject(mCam);
 
 
     // and tell it to render into the main window
-    Viewport* vp = getRenderWindow()->addViewport(cam);
+    Viewport* vp = getRenderWindow()->addViewport(mCam);
 
     vp->setBackgroundColour(Ogre::ColourValue(0.7, 0.8, 0.9));
 
@@ -333,9 +338,8 @@ void IG2App::setupIntro()
     mLightNode->attachObject(luz);
     mLightNode->setDirection(Ogre::Vector3(0, -1, 0));
 
-
-    Emoted* emoted = new Emoted(mSM, 0.5);
-    addInputListener(emoted);
+    mEmoted = new Emoted(mSM, 0.5);
+    addInputListener(mEmoted);
 }
 
 void IG2App::setupGame()
@@ -343,6 +347,32 @@ void IG2App::setupGame()
     // Limpiamos Escena
     mSM->clearScene();
 
+    // Rehacer config de camara
+    mCamNode = mSM->getRootSceneNode()->createChildSceneNode("nCam");
+    mCamNode->attachObject(mCam);
+
+    mCamMgr = new OgreBites::CameraMan(mCamNode);
+    addInputListener(mCamMgr);
+    mCamMgr->setStyle(OgreBites::CS_ORBIT);
+
+    // Skyplane
+    Plane plane;
+    plane.d = 1000;
+    plane.normal = Ogre::Vector3::UNIT_Z;
+
+    mSM->setSkyPlane
+    (
+        true,
+        plane,
+        "Examples/SpaceSkyPlane",
+        10,
+        1,
+        true,
+        1.5,
+        50,
+        50,
+        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME
+    );
 
     // Sinbad
     mSinbad = new Sinbad(Vector3(), mSM->getRootSceneNode()->createChildSceneNode(), mSM, 2);
