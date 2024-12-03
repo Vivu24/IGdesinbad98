@@ -15,18 +15,14 @@ void main() {
         discard;
     }
 
-    // Determinar si estamos procesando la cara frontal o trasera
     float faceSide = 0;
     if(gl_FrontFacing)
         faceSide = 1.0;
     else
-        faceSide = -1.0;
-    
+        faceSide = -1.0;    
 
-    // ???
     faceSide *= flipping;
 
-    // 
     vec4 side = texture(textM, vUv0);
 
     if(faceSide > 0.0 )
@@ -34,5 +30,5 @@ void main() {
     else
         side = texture(textCara, vUv0);
 
-    fFragColor = side; // Asignar el color de la textura al fragmento
+    fFragColor = side;
 } 

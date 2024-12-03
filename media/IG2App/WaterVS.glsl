@@ -22,6 +22,5 @@ void main()
 
     vertexCoord.y += sin(vertexCoord.x + (time*a)) * b + sin(vertexCoord.z + (distanceCenter) + (time*a)) * b;
 
-
     gl_Position = modelViewProjMat * vertexCoord; 
 }
